@@ -6,7 +6,7 @@ import AdminPanel from "./components/AdminPanel";
 import MaterialCard from "./components/MaterialCard";
 import RecycleBin from "./components/RecycleBin";
 
-const API = "http://localhost:5000";
+const API = "https://teacher-materials-inventory-system.onrender.com";
 
 export default function App() {
   const [materials, setMaterials] = useState([]);

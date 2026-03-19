@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const API = "http://localhost:5000";
+const API = "https://teacher-materials-inventory-system.onrender.com";
 
 export default function Login({ onClose }) {
   const [form, setForm] = useState({ username: "", password: "" });
