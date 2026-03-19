@@ -53,7 +53,7 @@ export default function AdminPanel({
       formData.append("url", form.url);
     }
 
-    const res = await fetch(`${API}/api/materials`, {
+  const res = await fetch(`${API}/api/materials`, {
       method: "POST",
       headers: {
         Authorization: adminToken // <- make sure token is sent

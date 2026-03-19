@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const API = "https://teacher-materials-inventory-system.onrender.com";
+const API = import.meta.env.VITE_API_URL || 'https://teacher-materials-inventory-system.onrender.com';
 
 export default function Login({ onClose }) {
   const [form, setForm] = useState({ username: "", password: "" });

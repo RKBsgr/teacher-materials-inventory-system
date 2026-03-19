@@ -7,12 +7,16 @@ export default function RecycleBin({
   viewMode
 }) {
   async function restore(id) {
-    await fetch(`${API}/api/materials/${id}/restore`, {
-      method: "POST",
-      headers: { Authorization: adminToken }
-    });
-    loadBin();
-    loadMaterials();
+    try {
+      const res = await fetch(`${API}/api/materials/${id}/restore`, {
+        method: "POST",
+        headers: { Authorization: adminToken }
+      });
+      if (res.ok) {
+        loadBin();
+        loadMaterials();
+      }
+    } catch {}
   }
 
   // helper to pick a file icon based on extension (copy from MaterialCard)

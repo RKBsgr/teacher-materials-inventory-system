@@ -3,11 +3,13 @@ import logo_download from "../assets/download-minimalistic-svgrepo-com.svg";
 
 export default function MaterialCard({ material, adminToken, API, loadMaterials, isGrid }) {
   async function deleteMaterial() {
-    await fetch(`${API}/api/materials/${material._id}`, {
-      method: "DELETE",
-      headers: { Authorization: adminToken }
-    });
-    loadMaterials();
+    try {
+      const res = await fetch(`${API}/api/materials/${material._id}`, {
+        method: "DELETE",
+        headers: { Authorization: adminToken }
+      });
+      if (res.ok) loadMaterials();
+    } catch {}
   }
 
   // Extract file extension
@@ -73,7 +75,7 @@ export default function MaterialCard({ material, adminToken, API, loadMaterials,
         ) : (
           <div className="action-icons">
             <a 
-              href={`http://localhost:5000${material.url}`} 
+              href={`${API || 'https://teacher-materials-inventory-system.onrender.com'}${material.url}`} 
               target="_blank" 
               rel="noreferrer"
               title="View"
@@ -81,7 +83,7 @@ export default function MaterialCard({ material, adminToken, API, loadMaterials,
               <img src={logo_view} alt="View" width={18} height={18}/>
             </a>
             <a 
-              href={`http://localhost:5000${material.url}`} 
+              href={`${API || 'https://teacher-materials-inventory-system.onrender.com'}${material.url}`} 
               download 
               title="Download"
             >
