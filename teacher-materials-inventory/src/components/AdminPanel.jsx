@@ -60,7 +60,7 @@ export default function AdminPanel({
   const res = await fetch(`${API}/api/materials`, {
       method: "POST",
       headers: {
-        Authorization: token // <- make sure token is sent
+        Authorization: `Bearer ${token}` // <- make sure token is sent
       },
       body: formData
     });
