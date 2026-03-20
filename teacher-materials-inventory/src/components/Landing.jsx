@@ -1,21 +1,39 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const API = import.meta.env.VITE_API_URL || 'https://teacher-materials-inventory-system.onrender.com';
 
 export default function Landing({ setToken }) {
   const [isLogin, setIsLogin] = useState(true);
-
   const [form, setForm] = useState({
     username: "",
     email: "",
     password: ""
   });
+  const [error, setError] = useState("");
+  const [showToast, setShowToast] = useState(false);
 
   function handleChange(e) {
+    setError("");
     setForm({ ...form, [e.target.name]: e.target.value });
   }
 
+  useEffect(() => {
+    if (showToast) {
+      const timer = setTimeout(() => {
+        setShowToast(false);
+        setError("");
+      }, 4000);
+      return () => clearTimeout(timer);
+    }
+  }, [showToast]);
+
   async function handleSubmit() {
+    if (!form.email.includes('@')) {
+      setError('Please enter a valid email (must contain @ symbol)');
+      setShowToast(true);
+      return;
+    }
+
     const endpoint = isLogin
       ? "/api/users/login"
       : "/api/users/register";
@@ -34,7 +52,8 @@ export default function Landing({ setToken }) {
       localStorage.setItem("token", data.token);
       setToken(data.token);
     } else {
-      alert(data.message || "Something went wrong");
+      setError(data.message || "Something went wrong");
+      setShowToast(true);
     }
   }
 
@@ -47,43 +66,53 @@ export default function Landing({ setToken }) {
           <input
             name="username"
             placeholder="Username"
-            onChange={handleChange}
-          />
-        )}
-
-        {!isLogin && (
-          <input
-            name="email"
-            placeholder="Email"
-            onChange={handleChange}
-          />
-        )}
-
-        {isLogin && (
-          <input
-            name="email"
-            placeholder="Email"
+            className="landing-input"
             onChange={handleChange}
           />
         )}
 
         <input
-          type="password"
-          name="password"
-          placeholder="Password"
+          name="email"
+          placeholder="Email"
+          className="landing-input"
           onChange={handleChange}
         />
 
-        <button onClick={handleSubmit}>
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          className="landing-input"
+          onChange={handleChange}
+        />
+
+
+        {error && (
+          <div className="error-message">{error}</div>
+        )}
+
+        <button className="landing-button" onClick={handleSubmit}>
           {isLogin ? "Login" : "Register"}
         </button>
 
         <p onClick={() => setIsLogin(!isLogin)} className="toggle-text">
           {isLogin
             ? "No account? Register here"
-            : "Already have an account? Login"}
+            : "Already have an account? Login"
+          }
         </p>
+
+        {showToast && (
+          <div className="toast" onClick={() => {
+            setShowToast(false);
+            setError("");
+          }}>
+            {error}
+            <span className="toast-close">&times;</span>
+          </div>
+        )}
       </div>
     </div>
   );
 }
+
