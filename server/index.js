@@ -159,7 +159,7 @@ app.post("/api/users/login", async (req, res) => {
     res.status(500).json({ message: "Login failed" });
   }
 });
-
+/*removed
 // Register admin (ONLY if none exists)
 app.post("/api/admin/register", async (req, res) => {
   try {
@@ -218,7 +218,7 @@ app.post("/api/admin/login", async (req, res) => {
 // Verify token
 app.get("/api/admin/verify", verifyUser,requireAdmin, (req, res) => {
   res.json({ valid: true });
-});
+});*/
 
 /* ===================== MATERIAL ROUTES ===================== */
 

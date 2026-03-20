@@ -92,7 +92,7 @@ export default function MaterialCard({ material, token, API, loadMaterials, isGr
           </div>
         )}
 
-        {adminToken && (
+        {token && (
           <button className="danger action-delete" onClick={deleteMaterial} title="Delete">
             🗑️
           </button>
