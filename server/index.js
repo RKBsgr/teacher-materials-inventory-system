@@ -12,7 +12,7 @@ const PORT = process.env.PORT || 5000;
 /* ===================== MIDDLEWARE ===================== */
 
 app.use(cors({
-  origin: "https://teacher-materials-inventory.vercel.app"
+  origin: "https://teacher-materials-inventory-system.vercel.app"
 }));
 app.use(express.json());
 
