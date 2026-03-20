@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import UserManagement from "./components/UserManagement";
 
 export default function AdminPanel({
   API,
@@ -26,6 +27,8 @@ export default function AdminPanel({
 
   const [selectedFile, setSelectedFile] = useState(null);
   const fileInputRef = useRef(null); // track the hidden file input
+  //added
+  const [showUsers, setShowUsers] = useState(false);
 
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -99,6 +102,12 @@ export default function AdminPanel({
           }}
         >
           {showBin ? "← Back to Materials" : "🗑️ Recycle Bin"}
+        </button>
+        <button
+          className="secondary"
+          onClick={() => setShowUsers(!showUsers)}
+        >
+          👥 Users
         </button>
       </div>
 
@@ -259,6 +268,9 @@ export default function AdminPanel({
             )}
           </div>
         </div>
+      )}
+      {showUsers && (
+        <UserManagement API={API} token={token} />
       )}
     </div>
   );

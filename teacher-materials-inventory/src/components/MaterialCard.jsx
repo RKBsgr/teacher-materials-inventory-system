@@ -49,6 +49,11 @@ export default function MaterialCard({ material, token, API, loadMaterials, isGr
       {/* Card Content */}
       <div className="card-content">
         <h3 className="card-title">{material.title}</h3>
+        
+        {/*added*/}
+        <p className="uploaded-by">
+          Uploaded by: {material.uploadedBy || "Unknown"}
+        </p>
 
         {/* Subject & Type */}
         <div className="card-meta">

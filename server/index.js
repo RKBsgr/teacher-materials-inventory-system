@@ -159,6 +159,33 @@ app.post("/api/users/login", async (req, res) => {
     res.status(500).json({ message: "Login failed" });
   }
 });
+
+// Get all users (ADMIN ONLY)
+app.get("/api/users", verifyUser, requireAdmin, async (req, res) => {
+  try {
+    const allUsers = await users.find({}, { projection: { password: 0 } }).toArray();
+    res.json(allUsers);
+  } catch (err) {
+    res.status(500).json({ message: "Failed to fetch users" });
+  }
+});
+
+// Update user role
+app.put("/api/users/:id/role", verifyUser, requireAdmin, async (req, res) => {
+  try {
+    const { role } = req.body;
+
+    await users.updateOne(
+      { _id: new ObjectId(req.params.id) },
+      { $set: { role } }
+    );
+
+    res.json({ message: "Role updated" });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to update role" });
+  }
+});
+
 /*removed
 // Register admin (ONLY if none exists)
 app.post("/api/admin/register", async (req, res) => {
@@ -279,6 +306,12 @@ app.post(
         category: req.body.category,
         url: filePath,
         deleted: false,
+
+        //  NEW FIELDS
+        uploadedBy: req.user.username,
+        uploaderRole: req.user.role,
+        uploadedById: req.user.id,
+
         createdAt: new Date()
       });
 
