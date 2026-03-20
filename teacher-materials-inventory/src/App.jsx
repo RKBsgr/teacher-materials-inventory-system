@@ -111,7 +111,7 @@ export default function App() {
   async function loadBin() {
     try {
       const res = await fetch(`${API}/api/materials/bin`, {
-        headers: { Authorization: token }
+        headers: { Authorization: `Bearer ${token}` }
       });
       const data = await res.json();
       setBin(Array.isArray(data) ? data : []);
