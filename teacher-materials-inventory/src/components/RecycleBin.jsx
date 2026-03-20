@@ -10,7 +10,7 @@ export default function RecycleBin({
     try {
       const res = await fetch(`${API}/api/materials/${id}/restore`, {
         method: "POST",
-        headers: { Authorization: token }
+        headers: { Authorization: `Bearer ${token}` }
       });
       if (res.ok) {
         loadBin();

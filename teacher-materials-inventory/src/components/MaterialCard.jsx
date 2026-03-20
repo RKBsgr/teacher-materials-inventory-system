@@ -6,7 +6,7 @@ export default function MaterialCard({ material, token, API, loadMaterials, isGr
     try {
       const res = await fetch(`${API}/api/materials/${material._id}`, {
         method: "DELETE",
-        headers: { Authorization: token }
+        headers: { Authorization: `Bearer ${token}` }
       });
       if (res.ok) loadMaterials();
     } catch {}
