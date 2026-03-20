@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import UserManagement from "./components/UserManagement";
+import UserManagement from "./UserManagement";
 
 export default function AdminPanel({
   API,
