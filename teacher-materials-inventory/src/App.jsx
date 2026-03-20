@@ -15,9 +15,11 @@ export default function App() {
   const [bin, setBin] = useState([]);
   const [types, setTypes] = useState([]);
 
+  //edited
   const [adminToken, setAdminToken] = useState(null);
   //added
   const [token, setToken] = useState(localStorage.getItem("token"));
+  const [user, setUser] = useState(null);
 
   const [showLogin, setShowLogin] = useState(false);
   const [showBin, setShowBin] = useState(false);
@@ -37,6 +39,17 @@ export default function App() {
     const savedToken = localStorage.getItem("token");
     if (savedToken) setToken(savedToken);
   }, []);
+  //addedstep3
+  useEffect(() => {
+    if (!token) return;
+
+    try {
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      setUser(payload);
+    } catch (err) {
+      console.error("Invalid token");
+    }
+  }, [token]);
 
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [search, setSearch] = useState("");
@@ -161,7 +174,7 @@ export default function App() {
         )}
 
         <main className="content">
-          {adminToken && (
+          {user?.role === "admin" && (
             <AdminPanel
               API={API}
               subjects={subjects}
@@ -185,6 +198,7 @@ export default function App() {
                   key={m._id}
                   material={m}
                   adminToken={adminToken}
+                  user={user}
                   API={API}
                   loadMaterials={loadMaterials}
                   isGrid={viewMode === "grid"}
@@ -193,7 +207,7 @@ export default function App() {
             </div>
           )}
 
-          {showBin && (
+          {showBin && user?.role === "admin" && (
             <RecycleBin
               bin={bin}
               API={API}

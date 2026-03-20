@@ -62,7 +62,7 @@ connectDB();
 
 /* ===================== AUTH MIDDLEWARE ===================== */
 
-function verifyAdmin(req, res, next) {
+function verifyUser(req, res, next) {
   const token = req.headers.authorization;
 
   if (!token) {
@@ -71,11 +71,22 @@ function verifyAdmin(req, res, next) {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    /*replaced
     req.admin = decoded;
+    with this*/
+    req.user = decoded; // for both admin and viewer
     next();
   } catch (err) {
     return res.status(401).json({ message: "Invalid or expired token" });
   }
+}
+
+//added
+function requireAdmin(req, res, next) {
+  if (req.user.role !== "admin") {
+    return res.status(403).json({ message: "Admin only" });
+  }
+  next();
 }
 
 /* ===================== ADMIN ROUTES ===================== */
@@ -205,7 +216,7 @@ app.post("/api/admin/login", async (req, res) => {
 });
 
 // Verify token
-app.get("/api/admin/verify", verifyAdmin, (req, res) => {
+app.get("/api/admin/verify", verifyUser,requireAdmin, (req, res) => {
   res.json({ valid: true });
 });
 
@@ -230,7 +241,7 @@ app.get("/api/materials", async (req, res) => {
 });
 
 // Get recycle bin
-app.get("/api/materials/bin", verifyAdmin, async (req, res) => {
+app.get("/api/materials/bin", verifyUser,requireAdmin, async (req, res) => {
   try {
     const data = await materials
       .find({ deleted: true })
@@ -245,7 +256,7 @@ app.get("/api/materials/bin", verifyAdmin, async (req, res) => {
 // Add material
 app.post(
   "/api/materials",
-  verifyAdmin,
+  verifyUser, requireAdmin, 
   upload.single("file"),
   async (req, res) => {
     try {
@@ -279,7 +290,7 @@ app.post(
 );
 
 // Soft delete
-app.delete("/api/materials/:id", verifyAdmin, async (req, res) => {
+app.delete("/api/materials/:id", verifyUser, requireAdmin, async (req, res) => {
   try {
     await materials.updateOne(
       { _id: new ObjectId(req.params.id) },
@@ -295,7 +306,7 @@ app.delete("/api/materials/:id", verifyAdmin, async (req, res) => {
 // Restore material
 app.post(
   "/api/materials/:id/restore",
-  verifyAdmin,
+  verifyUser, requireAdmin,
   async (req, res) => {
     try {
       await materials.updateOne(
