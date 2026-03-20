@@ -22,7 +22,7 @@ export default function UserManagement({ API, token }) {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Authorization: token
+        Authorization: `Bearer ${token}`
       },
       body: JSON.stringify({ role })
     });

@@ -68,6 +68,17 @@ export default function Sidebar({
           </button>
         </div>
 
+        <h4 className="section-title">Account</h4>
+        <button
+          className="secondary"
+          onClick={() => {
+            localStorage.removeItem("token");
+            window.location.reload();
+          }}
+        >
+          🚪 Logout
+        </button>
+
         {/*removed admin access from sidebar, moved to header --- IGNORE ---
         <h4 className="section-title">Admin Access</h4>
         {!adminToken ? (
