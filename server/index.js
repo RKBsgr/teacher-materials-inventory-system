@@ -43,7 +43,7 @@ let admins;
 async function connectDB() {
   try {
     await client.connect();
-    const db = client.db("process.env.DB_NAME");
+    const db = client.db();
 
     materials = db.collection("materials");
     admins = db.collection("admins");
