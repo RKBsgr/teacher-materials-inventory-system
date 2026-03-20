@@ -9,7 +9,12 @@ export default function UserManagement({ API, token }) {
     });
 
     const data = await res.json();
-    setUsers(data);
+    if (Array.isArray(data)) {
+        setUsers(data);
+    } else {
+        console.error(data);
+        setUsers([]);
+    }
   }
 
   async function updateRole(id, role) {

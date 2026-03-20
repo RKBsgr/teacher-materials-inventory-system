@@ -161,8 +161,12 @@ app.post("/api/users/login", async (req, res) => {
 });
 
 // Get all users (ADMIN ONLY)
-app.get("/api/users", verifyUser, requireEditor, async (req, res) => {
+app.get("/api/users", verifyUser, async (req, res) => {
   try {
+    if (req.user.role !== "admin") {
+      return res.status(403).json({ message: "Admin only" });
+    }
+    
     const allUsers = await users.find({}, { projection: { password: 0 } }).toArray();
     res.json(allUsers);
   } catch (err) {
