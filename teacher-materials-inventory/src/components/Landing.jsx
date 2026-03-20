@@ -11,10 +11,15 @@ export default function Landing({ setToken }) {
   });
   const [error, setError] = useState("");
   const [showToast, setShowToast] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   function handleChange(e) {
     setError("");
     setForm({ ...form, [e.target.name]: e.target.value });
+  }
+
+  function togglePassword() {
+    setShowPassword(!showPassword);
   }
 
   useEffect(() => {
@@ -68,6 +73,7 @@ export default function Landing({ setToken }) {
             placeholder="Username"
             className="landing-input"
             onChange={handleChange}
+            autoComplete="username"
           />
         )}
 
@@ -76,16 +82,22 @@ export default function Landing({ setToken }) {
           placeholder="Email"
           className="landing-input"
           onChange={handleChange}
+          autoComplete="email"
         />
 
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          className="landing-input"
-          onChange={handleChange}
-        />
-
+        <div className="password-wrapper">
+          <input
+            type={showPassword ? "text" : "password"}
+            name="password"
+            placeholder="Password"
+            className="landing-input"
+            onChange={handleChange}
+            autoComplete="new-password"
+          />
+          <button type="button" className="password-toggle" onClick={togglePassword} tabIndex="-1">
+            {showPassword ? "🙈" : "👁️"}
+          </button>
+        </div>
 
         {error && (
           <div className="error-message">{error}</div>
