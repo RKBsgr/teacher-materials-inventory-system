@@ -5,6 +5,7 @@ import Login from "./components/Login";
 import AdminPanel from "./components/AdminPanel";
 import MaterialCard from "./components/MaterialCard";
 import RecycleBin from "./components/RecycleBin";
+import Landing from "./components/Landing";
 
 const API = import.meta.env.VITE_API_URL || 'https://teacher-materials-inventory-system.onrender.com';
 
@@ -15,6 +16,9 @@ export default function App() {
   const [types, setTypes] = useState([]);
 
   const [adminToken, setAdminToken] = useState(null);
+  //added
+  const [token, setToken] = useState(localStorage.getItem("token"));
+
   const [showLogin, setShowLogin] = useState(false);
   const [showBin, setShowBin] = useState(false);
 
@@ -27,6 +31,13 @@ export default function App() {
   useEffect(() => {
     localStorage.setItem("viewMode", viewMode);
   }, [viewMode]);
+
+  //added
+  useEffect(() => {
+    const savedToken = localStorage.getItem("token");
+    if (savedToken) setToken(savedToken);
+  }, []);
+
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [search, setSearch] = useState("");
 
@@ -111,6 +122,11 @@ export default function App() {
       m.category?.toLowerCase().includes(keyword)
     );
   });
+
+  //added
+  if (!token) {
+    return <Landing setToken={setToken} />;
+  }
 
   return (
     <>
