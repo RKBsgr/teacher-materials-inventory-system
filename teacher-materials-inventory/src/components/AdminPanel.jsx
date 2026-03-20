@@ -12,7 +12,8 @@ export default function AdminPanel({
   loadTypes,
   showBin,
   setShowBin,
-  loadBin
+  loadBin,
+  user
 }) {
   const [form, setForm] = useState({
     title: "",
@@ -251,9 +252,11 @@ export default function AdminPanel({
             </div>
 
             {/* Submit Button */}
-            <button className="primary-btn" onClick={addMaterial}>
-              ✨ Add Material
-            </button>
+            {(user?.role === "admin" || user?.role === "editor") && (
+              <button className="primary-btn" onClick={addMaterial}>
+                ✨ Add Material
+              </button>
+            )}
           </div>
         </div>
       )}

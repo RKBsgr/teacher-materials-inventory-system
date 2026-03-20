@@ -177,7 +177,7 @@ export default function App() {
         )}*/}
 
         <main className="content">
-          {user?.role === "admin" && (
+          {(user?.role === "admin" || user?.role === "editor") && (
             <AdminPanel
               API={API}
               subjects={subjects}
@@ -191,6 +191,7 @@ export default function App() {
               showBin={showBin}
               setShowBin={setShowBin}
               loadBin={loadBin}
+              user={user}
             />
           )}
 
@@ -210,7 +211,7 @@ export default function App() {
             </div>
           )}
 
-          {showBin && user?.role === "admin" && (
+          {showBin && (user?.role === "admin" || user?.role === "editor") && (
             <RecycleBin
               bin={bin}
               API={API}

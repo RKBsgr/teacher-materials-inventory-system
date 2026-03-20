@@ -82,9 +82,9 @@ function verifyUser(req, res, next) {
 }
 
 //added
-function requireAdmin(req, res, next) {
-  if (req.user.role !== "admin") {
-    return res.status(403).json({ message: "Admin only" });
+function requireEditor(req, res, next) {
+  if (req.user.role !== "admin" && req.user.role !== "editor") {
+    return res.status(403).json({ message: "Editors or Admin only" });
   }
   next();
 }
@@ -241,7 +241,7 @@ app.get("/api/materials", async (req, res) => {
 });
 
 // Get recycle bin
-app.get("/api/materials/bin", verifyUser,requireAdmin, async (req, res) => {
+app.get("/api/materials/bin", verifyUser,requireEditor, async (req, res) => {
   try {
     const data = await materials
       .find({ deleted: true })
@@ -256,7 +256,7 @@ app.get("/api/materials/bin", verifyUser,requireAdmin, async (req, res) => {
 // Add material
 app.post(
   "/api/materials",
-  verifyUser, requireAdmin, 
+  verifyUser, requireEditor, 
   upload.single("file"),
   async (req, res) => {
     try {
@@ -290,7 +290,7 @@ app.post(
 );
 
 // Soft delete
-app.delete("/api/materials/:id", verifyUser, requireAdmin, async (req, res) => {
+app.delete("/api/materials/:id", verifyUser, requireEditor, async (req, res) => {
   try {
     await materials.updateOne(
       { _id: new ObjectId(req.params.id) },
@@ -306,7 +306,7 @@ app.delete("/api/materials/:id", verifyUser, requireAdmin, async (req, res) => {
 // Restore material
 app.post(
   "/api/materials/:id/restore",
-  verifyUser, requireAdmin,
+  verifyUser, requireEditor,
   async (req, res) => {
     try {
       await materials.updateOne(
