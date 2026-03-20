@@ -63,12 +63,18 @@ connectDB();
 /* ===================== AUTH MIDDLEWARE ===================== */
 
 function verifyUser(req, res, next) {
-  const token = req.headers.authorization;
+  const authHeader = req.headers.authorization;
 
-  if (!token) {
+  if (!authHeader) {
     return res.status(401).json({ message: "Unauthorized" });
   }
 
+  const token = authHeader.split(" ")[1];
+/*
+  if (!token) {
+    return res.status(401).json({ message: "Unauthorized" });
+  }
+*/
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     /*replaced
@@ -166,7 +172,7 @@ app.get("/api/users", verifyUser, async (req, res) => {
     if (req.user.role !== "admin") {
       return res.status(403).json({ message: "Admin only" });
     }
-    
+
     const allUsers = await users.find({}, { projection: { password: 0 } }).toArray();
     res.json(allUsers);
   } catch (err) {

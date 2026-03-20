@@ -5,7 +5,7 @@ export default function UserManagement({ API, token }) {
 
   async function loadUsers() {
     const res = await fetch(`${API}/api/users`, {
-      headers: { Authorization: token }
+      headers: { Authorization: `Bearer ${token}` }
     });
 
     const data = await res.json();
