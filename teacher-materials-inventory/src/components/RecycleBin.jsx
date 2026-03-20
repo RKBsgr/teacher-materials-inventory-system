@@ -1,7 +1,7 @@
 export default function RecycleBin({
   bin,
   API,
-  adminToken,
+  token,
   loadBin,
   loadMaterials,
   viewMode
@@ -10,7 +10,7 @@ export default function RecycleBin({
     try {
       const res = await fetch(`${API}/api/materials/${id}/restore`, {
         method: "POST",
-        headers: { Authorization: adminToken }
+        headers: { Authorization: token }
       });
       if (res.ok) {
         loadBin();

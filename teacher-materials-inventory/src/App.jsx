@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Header from "./components/Header";
 import Sidebar from "./components/Sidebar";
-import Login from "./components/Login";
+//import Login from "./components/Login";
 import AdminPanel from "./components/AdminPanel";
 import MaterialCard from "./components/MaterialCard";
 import RecycleBin from "./components/RecycleBin";
@@ -15,8 +15,8 @@ export default function App() {
   const [bin, setBin] = useState([]);
   const [types, setTypes] = useState([]);
 
-  //edited
-  const [adminToken, setAdminToken] = useState(null);
+  /*removed adminToken, added user state
+  const [adminToken, setAdminToken] = useState(null);*/
   //added
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [user, setUser] = useState(null);
@@ -62,6 +62,7 @@ export default function App() {
 
   /* ================= VERIFY TOKEN ================= */
 
+/*removed admin token verification from app load, added user token verification
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) return;
@@ -75,7 +76,7 @@ export default function App() {
         localStorage.removeItem("token");
         setAdminToken(null);
       });
-  }, []);
+  }, []);*/
 
   /* ================= LOAD DATA ================= */
 
@@ -110,7 +111,7 @@ export default function App() {
   async function loadBin() {
     try {
       const res = await fetch(`${API}/api/materials/bin`, {
-        headers: { Authorization: adminToken }
+        headers: { Authorization: token }
       });
       const data = await res.json();
       setBin(Array.isArray(data) ? data : []);
@@ -120,11 +121,12 @@ export default function App() {
     }
   }
 
+  /*removed
   function logoutAdmin() {
     localStorage.removeItem("token");
     setAdminToken(null);
     setShowBin(false);
-  }
+  }*/
 
   const filteredMaterials = materials.filter(m => {
     const keyword = search.toLowerCase();
@@ -163,15 +165,16 @@ export default function App() {
           setViewMode={setViewMode}
           darkMode={darkMode}
           setDarkMode={setDarkMode}
+          /*removed
           adminToken={adminToken}
           logoutAdmin={logoutAdmin}
           showLogin={showLogin}
-          setShowLogin={setShowLogin}
+          setShowLogin={setShowLogin}*/
         />
-
+        {/*removed
         {showLogin && !adminToken && (
           <Login onClose={() => setShowLogin(false)} />
-        )}
+        )}*/}
 
         <main className="content">
           {user?.role === "admin" && (
@@ -181,7 +184,7 @@ export default function App() {
               setSubjects={setSubjects}
               types={types}
               setTypes={setTypes}
-              adminToken={adminToken}
+              token={token}
               loadMaterials={loadMaterials}
               loadSubjects={loadSubjects}
               loadTypes={loadTypes}
@@ -197,7 +200,7 @@ export default function App() {
                 <MaterialCard
                   key={m._id}
                   material={m}
-                  adminToken={adminToken}
+                  token={token}
                   user={user}
                   API={API}
                   loadMaterials={loadMaterials}
@@ -211,7 +214,7 @@ export default function App() {
             <RecycleBin
               bin={bin}
               API={API}
-              adminToken={adminToken}
+              token={token}
               loadBin={loadBin}
               loadMaterials={loadMaterials}
               viewMode={viewMode}

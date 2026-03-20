@@ -10,10 +10,6 @@ export default function Sidebar({
   setViewMode,
   darkMode,
   setDarkMode,
-  adminToken,
-  logoutAdmin,
-  showLogin,
-  setShowLogin
 }) {
   return (
     <aside className={`sidebar ${sidebarOpen ? "" : "collapsed"}`}>
@@ -72,6 +68,7 @@ export default function Sidebar({
           </button>
         </div>
 
+        {/*removed admin access from sidebar, moved to header --- IGNORE ---
         <h4 className="section-title">Admin Access</h4>
         {!adminToken ? (
           <button onClick={() => setShowLogin(!showLogin)}>
@@ -81,7 +78,7 @@ export default function Sidebar({
           <button className="secondary" onClick={logoutAdmin}>
             Exit Admin
           </button>
-        )}
+        )}*/}
       </div>
     </aside>
   );

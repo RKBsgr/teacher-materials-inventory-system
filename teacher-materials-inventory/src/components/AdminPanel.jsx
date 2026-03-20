@@ -6,7 +6,7 @@ export default function AdminPanel({
   setSubjects,
   types,
   setTypes,
-  adminToken,
+  token,
   loadMaterials,
   loadSubjects,
   loadTypes,
@@ -56,7 +56,7 @@ export default function AdminPanel({
   const res = await fetch(`${API}/api/materials`, {
       method: "POST",
       headers: {
-        Authorization: adminToken // <- make sure token is sent
+        Authorization: token // <- make sure token is sent
       },
       body: formData
     });
@@ -87,7 +87,7 @@ export default function AdminPanel({
       {/* Admin Header with Actions */}
       <div className="admin-header">
         <div className="admin-title-section">
-          <h2>📚 Admin Dashboard</h2>
+          <h2>📚 Dashboard</h2>
           <p>Manage your teaching materials</p>
         </div>
         <button

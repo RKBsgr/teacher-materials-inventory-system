@@ -1,12 +1,12 @@
 import logo_view from "../assets/view-svgrepo-com.svg";
 import logo_download from "../assets/download-minimalistic-svgrepo-com.svg";
 
-export default function MaterialCard({ material, adminToken, API, loadMaterials, isGrid }) {
+export default function MaterialCard({ material, token, API, loadMaterials, isGrid }) {
   async function deleteMaterial() {
     try {
       const res = await fetch(`${API}/api/materials/${material._id}`, {
         method: "DELETE",
-        headers: { Authorization: adminToken }
+        headers: { Authorization: token }
       });
       if (res.ok) loadMaterials();
     } catch {}
