@@ -161,7 +161,7 @@ app.post("/api/users/login", async (req, res) => {
 });
 
 // Get all users (ADMIN ONLY)
-app.get("/api/users", verifyUser, requireAdmin, async (req, res) => {
+app.get("/api/users", verifyUser, requireEditor, async (req, res) => {
   try {
     const allUsers = await users.find({}, { projection: { password: 0 } }).toArray();
     res.json(allUsers);
@@ -171,7 +171,7 @@ app.get("/api/users", verifyUser, requireAdmin, async (req, res) => {
 });
 
 // Update user role
-app.put("/api/users/:id/role", verifyUser, requireAdmin, async (req, res) => {
+app.put("/api/users/:id/role", verifyUser, requireEditor, async (req, res) => {
   try {
     const { role } = req.body;
 
