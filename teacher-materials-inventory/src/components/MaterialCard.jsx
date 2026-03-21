@@ -12,18 +12,15 @@ export default function MaterialCard({ material, token, API, loadMaterials, isGr
     } catch {}
   }
 
-  // Extract file extension
-  const getFileExtension = () => {
-    /*removed
-    const url = material.url || "";*/
-    const fileUrl = material.url.startsWith("http")
-      ? material.url
-      : `${API}${material.url}`;
+  const fileUrl = material.url.startsWith("http")
+    ? material.url
+    : `${API}${material.url}`;
 
-    window.open(fileUrl);
-    const ext = url.split(".").pop().toLowerCase();
-    return ext;
-  };
+  // Extract file extension
+    const getFileExtension = () => {
+      const url = material.url || "";
+      return url.split(".").pop().toLowerCase();
+    };
 
   // Get file type icon/emoji
   const getFileTypeIcon = () => {
@@ -87,7 +84,7 @@ export default function MaterialCard({ material, token, API, loadMaterials, isGr
           <div className="action-icons">
             <a 
               //href={`${API || 'https://teacher-materials-inventory-system.onrender.com'}${material.url}`} 
-              href={`${API} || ${material.url}`} 
+              href={fileUrl} 
               target="_blank" 
               rel="noreferrer"
               title="View"
@@ -96,7 +93,7 @@ export default function MaterialCard({ material, token, API, loadMaterials, isGr
             </a>
             <a
               //href={`${API || 'https://teacher-materials-inventory-system.onrender.com'}${material.url}`}  
-              href={`${API} || ${material.url}`} 
+              href={fileUrl} 
               download 
               title="Download"
             >
