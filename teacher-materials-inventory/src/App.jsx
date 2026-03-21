@@ -176,56 +176,58 @@ export default function App() {
         )}*/}
 
         <main className="content">
-          {(user?.role === "admin" || user?.role === "editor") && (
-            <AdminPanel
-              API={API}
-              subjects={subjects}
-              setSubjects={setSubjects}
-              types={types}
-              setTypes={setTypes}
-              token={token}
-              loadMaterials={loadMaterials}
-              loadSubjects={loadSubjects}
-              loadTypes={loadTypes}
-              showBin={showBin}
-              setShowBin={setShowBin}
-              loadBin={loadBin}
-              user={user}
-            />
-          )}
-
-          {!showBin && (
-            <div className={viewMode === "grid" ? "grid-layout" : "list-layout"}>
-              {filteredMaterials.map(m => (
-                <MaterialCard
-                  key={m._id}
-                  material={m}
-                  token={token}
-                  user={user}
+          {showUsers ? (
+            <UserManagement API={API} token={token} />
+          ) : (
+            <>
+              {(user?.role === "admin" || user?.role === "editor") && (
+                <AdminPanel
                   API={API}
+                  subjects={subjects}
+                  setSubjects={setSubjects}
+                  types={types}
+                  setTypes={setTypes}
+                  token={token}
                   loadMaterials={loadMaterials}
-                  isGrid={viewMode === "grid"}
+                  loadSubjects={loadSubjects}
+                  loadTypes={loadTypes}
+                  showBin={showBin}
+                  setShowBin={setShowBin}
+                  loadBin={loadBin}
+                  user={user}
                 />
-              ))}
-            </div>
-          )}
+              )}
 
-          {showBin && (user?.role === "admin" || user?.role === "editor") && (
-            <RecycleBin
-              bin={bin}
-              API={API}
-              token={token}
-              loadBin={loadBin}
-              loadMaterials={loadMaterials}
-              viewMode={viewMode}
-            />
+              {!showBin && (
+                <div className={viewMode === "grid" ? "grid-layout" : "list-layout"}>
+                  {filteredMaterials.map(m => (
+                    <MaterialCard
+                      key={m._id}
+                      material={m}
+                      token={token}
+                      user={user}
+                      API={API}
+                      loadMaterials={loadMaterials}
+                      isGrid={viewMode === "grid"}
+                    />
+                  ))}
+                </div>
+              )}
+
+              {showBin && (user?.role === "admin" || user?.role === "editor") && (
+                <RecycleBin
+                  bin={bin}
+                  API={API}
+                  token={token}
+                  loadBin={loadBin}
+                  loadMaterials={loadMaterials}
+                  viewMode={viewMode}
+                />
+              )}
+            </>
           )}
         </main>
       </div>
-
-      {showUsers && (
-        <UserManagement API={API} token={token} />
-      )}
     </>
   );
 }
