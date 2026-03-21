@@ -33,19 +33,9 @@ app.use(express.json());
 
 const storage = new CloudinaryStorage({
   cloudinary,
-  params: async (req, file) => {
-    let resourceType = "raw";
-
-    if (file.mimetype.startsWith("image")) {
-      resourceType = "image";
-    } else if (file.mimetype.startsWith("video")) {
-      resourceType = "video";
-    }
-
-    return {
-      folder: "materials",
-      resource_type: resourceType
-    };
+  params: {
+    folder: "materials",
+    resource_type: "raw" // 🔥 FORCE RAW
   }
 });
 
@@ -379,3 +369,5 @@ app.get("/api/types", async (req, res) => {
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
+
+//console.log(req.file);
