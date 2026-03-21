@@ -224,9 +224,7 @@ export default function App() {
       </div>
 
       {showUsers && (
-        <div className="admin-form-card w-full max-w-4xl mx-auto p-6 mt-6">
-          <UserManagement API={API} token={token} />
-        </div>
+        <UserManagement API={API} token={token} />
       )}
     </>
   );
