@@ -6,6 +6,7 @@ import AdminPanel from "./components/AdminPanel";
 import MaterialCard from "./components/MaterialCard";
 import RecycleBin from "./components/RecycleBin";
 import Landing from "./components/Landing";
+import UserManagement from "./components/UserManagement";
 
 const API = import.meta.env.VITE_API_URL || 'https://teacher-materials-inventory-system.onrender.com';
 
@@ -23,6 +24,7 @@ export default function App() {
 
   const [showLogin, setShowLogin] = useState(false);
   const [showBin, setShowBin] = useState(false);
+  const [showUsers, setShowUsers] = useState(false);
 
   const [viewMode, setViewMode] = useState(() => {
     // initialize from local storage for this device only
@@ -165,6 +167,8 @@ export default function App() {
           setViewMode={setViewMode}
           darkMode={darkMode}
           setDarkMode={setDarkMode}
+          showUsers={showUsers}
+          setShowUsers={setShowUsers}
         /> 
         {/*removed
         {showLogin && !adminToken && (
@@ -218,6 +222,12 @@ export default function App() {
           )}
         </main>
       </div>
+
+      {showUsers && (
+        <div className="admin-form-card w-full max-w-4xl mx-auto p-6 mt-6">
+          <UserManagement API={API} token={token} />
+        </div>
+      )}
     </>
   );
 }

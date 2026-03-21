@@ -10,6 +10,8 @@ export default function Sidebar({
   setViewMode,
   darkMode,
   setDarkMode,
+  showUsers,
+  setShowUsers,
 }) {
   return (
     <aside className={`sidebar ${sidebarOpen ? "" : "collapsed"}`}>
@@ -69,7 +71,10 @@ export default function Sidebar({
         </div>
 
         <h4 className="section-title">User Management</h4>
-        <button className="secondary">
+        <button
+          className="secondary"
+          onClick={() => setShowUsers(!showUsers)}
+        >
           Users
         </button>
 
