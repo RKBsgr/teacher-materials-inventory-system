@@ -12,6 +12,7 @@ const PORT = process.env.PORT || 5000;
 //added
 const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const fs = require("fs");
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -31,7 +32,7 @@ app.use(express.json());
 
 /* ===================== FILE UPLOAD ===================== */
 
-const storage = new CloudinaryStorage({
+/*const storage = new CloudinaryStorage({
   cloudinary,
   params: async (req, file) => {
     let resourceType = "raw";
@@ -47,12 +48,15 @@ const storage = new CloudinaryStorage({
       resource_type: resourceType
     };
   }
-});
+});*/
 
+const upload = multer({ dest: "temp/" });
+
+/*removed
 const upload = multer({
   storage,
   limits: { fileSize: 50 * 1024 * 1024 } // 50MB limit
-});
+});*/
 
 /* ===================== DATABASE ===================== */
 
@@ -253,6 +257,51 @@ app.get("/api/materials/bin", verifyUser,requireEditor, async (req, res) => {
 // Add material
 app.post(
   "/api/materials",
+  verifyUser,
+  requireEditor,
+  upload.single("file"),
+  async (req, res) => {
+    try {
+      let filePath;
+
+      if (req.file) {
+        const result = await cloudinary.uploader.upload(req.file.path, {
+          folder: "materials",
+          resource_type: "auto" // 🔥 IMPORTANT
+        });
+
+        filePath = result.secure_url;
+      } else if (req.body.url) {
+        filePath = req.body.url;
+      } else {
+        return res.status(400).json({ message: "File or URL required" });
+      }
+
+      await materials.insertOne({
+        title: req.body.title,
+        subject: req.body.subject,
+        type: req.body.type,
+        category: req.body.category,
+        url: filePath,
+        deleted: false,
+        uploadedBy: req.user.username,
+        uploaderRole: req.user.role,
+        uploadedById: req.user.id,
+        createdAt: new Date()
+      });
+
+      res.json({ message: "Material added" });
+
+    } catch (err) {
+      console.error("UPLOAD ERROR:", err);
+      res.status(500).json({ message: "Upload failed" });
+    }
+  }
+);
+
+/*removed
+app.post(
+  "/api/materials",
   verifyUser, requireEditor, 
   upload.single("file"),
   async (req, res) => {
@@ -304,7 +353,7 @@ app.post(
       res.status(500).json({ message: "Upload failed" });
     }
   }
-);
+);*/
 
 // Soft delete
 app.delete("/api/materials/:id", verifyUser, requireEditor, async (req, res) => {
