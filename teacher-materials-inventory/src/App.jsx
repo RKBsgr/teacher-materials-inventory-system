@@ -6,7 +6,6 @@ import AdminPanel from "./components/AdminPanel";
 import MaterialCard from "./components/MaterialCard";
 import RecycleBin from "./components/RecycleBin";
 import Landing from "./components/Landing";
-import UserManagement from "./components/UserManagement";
 
 const API = import.meta.env.VITE_API_URL || 'https://teacher-materials-inventory-system.onrender.com';
 
@@ -24,7 +23,6 @@ export default function App() {
 
   const [showLogin, setShowLogin] = useState(false);
   const [showBin, setShowBin] = useState(false);
-  const [showUsers, setShowUsers] = useState(false);
 
   const [viewMode, setViewMode] = useState(() => {
     // initialize from local storage for this device only
@@ -167,9 +165,7 @@ export default function App() {
           setViewMode={setViewMode}
           darkMode={darkMode}
           setDarkMode={setDarkMode}
-          showUsers={showUsers}
-          setShowUsers={setShowUsers}
-        />
+        /> 
         {/*removed
         {showLogin && !adminToken && (
           <Login onClose={() => setShowLogin(false)} />
@@ -222,29 +218,6 @@ export default function App() {
           )}
         </main>
       </div>
-
-      {showUsers && (
-        <div 
-          className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4"
-          onClick={() => setShowUsers(false)}
-        >
-          <div 
-            className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-xl max-w-4xl max-h-[90vh] overflow-auto w-full mx-4"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-2xl font-bold">👥 User Management</h2>
-              <button
-                onClick={() => setShowUsers(false)}
-                className="text-xl hover:text-red-500"
-              >
-                ×
-              </button>
-            </div>
-            <UserManagement API={API} token={token} />
-          </div>
-        </div>
-      )}
     </>
   );
 }
