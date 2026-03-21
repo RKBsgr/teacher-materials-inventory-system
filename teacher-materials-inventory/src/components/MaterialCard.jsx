@@ -87,7 +87,7 @@ export default function MaterialCard({ material, token, API, loadMaterials, isGr
           <div className="action-icons">
             <a 
               //href={`${API || 'https://teacher-materials-inventory-system.onrender.com'}${material.url}`} 
-              href={material.url} 
+              href={`${API} || ${material.url}`} 
               target="_blank" 
               rel="noreferrer"
               title="View"
@@ -96,7 +96,7 @@ export default function MaterialCard({ material, token, API, loadMaterials, isGr
             </a>
             <a
               //href={`${API || 'https://teacher-materials-inventory-system.onrender.com'}${material.url}`}  
-              href={material.url} 
+              href={`${API} || ${material.url}`} 
               download 
               title="Download"
             >
