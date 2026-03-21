@@ -33,9 +33,19 @@ app.use(express.json());
 
 const storage = new CloudinaryStorage({
   cloudinary,
-  params: {
-    folder: "materials",
-    resource_type: "raw" // 🔥 FORCE RAW
+  params: async (req, file) => {
+    let resourceType = "raw";
+
+    if (file.mimetype.startsWith("image/")) {
+      resourceType = "image";
+    } else if (file.mimetype === "application/pdf") {
+      resourceType = "image"; // ✅ IMPORTANT (Cloudinary trick)
+    }
+
+    return {
+      folder: "materials",
+      resource_type: resourceType
+    };
   }
 });
 

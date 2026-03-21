@@ -16,9 +16,12 @@ export default function MaterialCard({ material, token, API, loadMaterials, isGr
     ? material.url
     : `${API}${material.url}`;
 
+  /*removed
   const downloadUrl = fileUrl.includes("cloudinary")
     ? fileUrl.replace("/upload/", "/upload/fl_attachment/")
-    : fileUrl;
+    : fileUrl;*/
+
+  const downloadUrl = fileUrl.replace("/upload/", "/upload/fl_attachment/");
 
   // Extract file extension
     const getFileExtension = () => {
