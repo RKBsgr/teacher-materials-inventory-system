@@ -16,6 +16,10 @@ export default function MaterialCard({ material, token, API, loadMaterials, isGr
     ? material.url
     : `${API}${material.url}`;
 
+  const downloadUrl = fileUrl.includes("cloudinary")
+    ? fileUrl.replace("/upload/", "/upload/fl_attachment/")
+    : fileUrl;
+
   // Extract file extension
     const getFileExtension = () => {
       const url = material.url || "";
@@ -93,8 +97,9 @@ export default function MaterialCard({ material, token, API, loadMaterials, isGr
             </a>
             <a
               //href={`${API || 'https://teacher-materials-inventory-system.onrender.com'}${material.url}`}  
-              href={fileUrl} 
-              download 
+              href={downloadUrl}
+              target="_blank"
+              rel="noreferrer"
               title="Download"
             >
               <img src={logo_download} alt="Download" width={18} height={18}/>
