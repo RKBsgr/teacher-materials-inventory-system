@@ -64,7 +64,8 @@ export default function AdminPanel({
     });
 
     if (!res.ok) {
-      alert("Failed to add material");
+      const err = await res.json();
+      alert(err.message || "Failed to add material");
       return;
     }
 

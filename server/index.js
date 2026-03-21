@@ -207,67 +207,6 @@ app.put("/api/users/:id/role", verifyUser, requireEditor, async (req, res) => {
   }
 });
 
-/*removed
-// Register admin (ONLY if none exists)
-app.post("/api/admin/register", async (req, res) => {
-  try {
-    const existingAdmin = await admins.findOne({});
-
-    if (existingAdmin) {
-      return res.status(403).json({ message: "Admin already exists" });
-    }
-
-    const hashedPassword = await bcrypt.hash(req.body.password, 10);
-
-    await admins.insertOne({
-      username: req.body.username,
-      password: hashedPassword,
-      createdAt: new Date()
-    });
-
-    res.json({ message: "Admin created" });
-  } catch (err) {
-    res.status(500).json({ message: "Admin registration failed" });
-  }
-});
-
-// Login
-app.post("/api/admin/login", async (req, res) => {
-  try {
-    const admin = await admins.findOne({
-      username: req.body.username
-    });
-
-    if (!admin) {
-      return res.status(401).json({ message: "Invalid credentials" });
-    }
-
-    const match = await bcrypt.compare(
-      req.body.password,
-      admin.password
-    );
-
-    if (!match) {
-      return res.status(401).json({ message: "Invalid credentials" });
-    }
-
-    const token = jwt.sign(
-      { adminId: admin._id },
-      process.env.JWT_SECRET,
-      { expiresIn: "2h" }
-    );
-
-    res.json({ token });
-  } catch (err) {
-    res.status(500).json({ message: "Login failed" });
-  }
-});
-
-// Verify token
-app.get("/api/admin/verify", verifyUser,requireAdmin, (req, res) => {
-  res.json({ valid: true });
-});*/
-
 /* ===================== MATERIAL ROUTES ===================== */
 
 // Get materials (with filters)
@@ -318,6 +257,20 @@ app.post(
         return res
           .status(400)
           .json({ message: "File or URL required" });
+      }
+
+      const existing = await materials.findOne({
+        $or: [
+          { title: req.body.title, subject: req.body.subject },
+          { url: filePath }
+        ],
+        deleted: { $ne: true }
+      });
+
+      if (existing) {
+        return res.status(400).json({
+          message: "Duplicate material detected"
+        });
       }
 
       await materials.insertOne({
