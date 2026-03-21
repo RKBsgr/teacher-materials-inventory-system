@@ -91,18 +91,25 @@ export default function MaterialCard({ material, token, API, loadMaterials, isGr
           <div className="action-icons">
             <a 
               //href={`${API || 'https://teacher-materials-inventory-system.onrender.com'}${material.url}`} 
-              href={fileUrl} 
-              target="_blank" 
-              rel="noreferrer"
+              href={fileUrl}
+              onClick={(e) => {
+                e.preventDefault();
+                window.open(fileUrl, "_blank");
+              }}
               title="View"
             >
               <img src={logo_view} alt="View" width={18} height={18}/>
             </a>
             <a
               //href={`${API || 'https://teacher-materials-inventory-system.onrender.com'}${material.url}`}  
-              href={downloadUrl}
-              target="_blank"
-              rel="noreferrer"
+              href={fileUrl}
+              onClick={(e) => {
+                e.preventDefault();
+                const link = document.createElement("a");
+                link.href = fileUrl;
+                link.download = "";
+                link.click();
+              }}
               title="Download"
             >
               <img src={logo_download} alt="Download" width={18} height={18}/>
