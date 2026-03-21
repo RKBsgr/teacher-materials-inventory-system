@@ -14,7 +14,13 @@ export default function MaterialCard({ material, token, API, loadMaterials, isGr
 
   // Extract file extension
   const getFileExtension = () => {
-    const url = material.url || "";
+    /*removed
+    const url = material.url || "";*/
+    const fileUrl = material.url.startsWith("http")
+      ? material.url
+      : `${API}${material.url}`;
+
+    window.open(fileUrl);
     const ext = url.split(".").pop().toLowerCase();
     return ext;
   };
@@ -80,15 +86,17 @@ export default function MaterialCard({ material, token, API, loadMaterials, isGr
         ) : (
           <div className="action-icons">
             <a 
-              href={`${API || 'https://teacher-materials-inventory-system.onrender.com'}${material.url}`} 
+              //href={`${API || 'https://teacher-materials-inventory-system.onrender.com'}${material.url}`} 
+              href={material.url} 
               target="_blank" 
               rel="noreferrer"
               title="View"
             >
               <img src={logo_view} alt="View" width={18} height={18}/>
             </a>
-            <a 
-              href={`${API || 'https://teacher-materials-inventory-system.onrender.com'}${material.url}`} 
+            <a
+              //href={`${API || 'https://teacher-materials-inventory-system.onrender.com'}${material.url}`}  
+              href={material.url} 
               download 
               title="Download"
             >
