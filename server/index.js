@@ -267,7 +267,8 @@ app.post(
       if (req.file) {
         const result = await cloudinary.uploader.upload(req.file.path, {
           folder: "materials",
-          resource_type: "auto",
+          resource_type: "raw",
+          public_id: req.file.originalname, // ✅ keeps filename + extension
           use_filename: true,
           unique_filename: false
         });
