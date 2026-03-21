@@ -27,8 +27,6 @@ export default function AdminPanel({
 
   const [selectedFile, setSelectedFile] = useState(null);
   const fileInputRef = useRef(null); // track the hidden file input
-  //added
-  const [showUsers, setShowUsers] = useState(false);
 
   function handleChange(e) {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -78,7 +76,7 @@ export default function AdminPanel({
     setForm({
       title: "",
       subject: "",
-      category: "Encoded",
+      category: "Uploaded",
       type: "PDF",
       url: "",
       file: null
@@ -102,12 +100,6 @@ export default function AdminPanel({
           }}
         >
           {showBin ? "← Back to Materials" : "🗑️ Recycle Bin"}
-        </button>
-        <button
-          className="secondary"
-          onClick={() => setShowUsers(!showUsers)}
-        >
-          👥 Users
         </button>
       </div>
 
@@ -268,9 +260,6 @@ export default function AdminPanel({
             )}
           </div>
         </div>
-      )}
-      {showUsers && (
-        <UserManagement API={API} token={token} />
       )}
     </div>
   );

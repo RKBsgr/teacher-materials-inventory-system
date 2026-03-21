@@ -34,7 +34,7 @@ export default function Landing({ setToken }) {
 
   async function handleSubmit() {
     if (!form.email.includes('@')) {
-      setError('Please enter a valid email (must contain @ symbol)');
+      setError('Please enter a valid email address');
       setShowToast(true);
       return;
     }
