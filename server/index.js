@@ -32,10 +32,20 @@ app.use(express.json());
 /* ===================== FILE UPLOAD ===================== */
 
 const storage = new CloudinaryStorage({
-  cloudinary: cloudinary,
-  params: {
-    folder: "materials",
-    resource_type: "auto" // supports pdf, docx, images, etc
+  cloudinary,
+  params: async (req, file) => {
+    let resourceType = "raw";
+
+    if (file.mimetype.startsWith("image")) {
+      resourceType = "image";
+    } else if (file.mimetype.startsWith("video")) {
+      resourceType = "video";
+    }
+
+    return {
+      folder: "materials",
+      resource_type: resourceType
+    };
   }
 });
 
