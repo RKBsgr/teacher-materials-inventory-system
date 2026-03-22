@@ -12,16 +12,17 @@ export default function MaterialCard({ material, token, API, loadMaterials, isGr
     } catch {}
   }
 
-  const fileUrl = material.url.startsWith("http")
-    ? material.url
-    : `${API}${material.url}`;
+  const fileUrl = material.url;
+
+  const viewUrl = '${fileUrl}?download=false';
+  const downloadUrl = '${fileUrl}?download=true';
 
   /*removed
   const downloadUrl = fileUrl.includes("cloudinary")
     ? fileUrl.replace("/upload/", "/upload/fl_attachment/")
     : fileUrl;*/
 
-
+/*
   const getCloudinaryUrl = (baseUrl, attachment = false) => {
     if (!baseUrl.includes('cloudinary')) return baseUrl;
     const parts = baseUrl.split('/upload/');
@@ -31,7 +32,7 @@ export default function MaterialCard({ material, token, API, loadMaterials, isGr
     return parts[0] + '/upload/' + (attachment ? 'fl_attachment/' : '') + beforeVersion + (versionAndAfter ? '/v' + versionAndAfter : '');
   };
   const viewUrl = getCloudinaryUrl(fileUrl, false);
-  const downloadUrl = getCloudinaryUrl(fileUrl, true);
+  const downloadUrl = getCloudinaryUrl(fileUrl, true);*/
 
   // Extract file extension
     const getFileExtension = () => {
@@ -100,17 +101,15 @@ export default function MaterialCard({ material, token, API, loadMaterials, isGr
         ) : (
           <div className="action-icons">
             <a 
-              //href={`${API || 'https://teacher-materials-inventory-system.onrender.com'}${material.url}`} 
-              href={fileUrl + (fileUrl.includes('cloudinary') ? '/fl_attachment/' : '')}
-              target="_blank" rel="noopener noreferrer"
+              href={viewUrl}
+              target="_blank"
+              rel="noreferrer"
               title="View"
             >
               <img src={logo_view} alt="View" width={18} height={18}/>
             </a>
             <a
-              //href={`${API || 'https://teacher-materials-inventory-system.onrender.com'}${material.url}`}  
               href={downloadUrl}
-              download
               title="Download"
             >
               <img src={logo_download} alt="Download" width={18} height={18}/>
