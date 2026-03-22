@@ -829,19 +829,16 @@ button.danger {
 }
 
 .nav-container {
-  max-width: 1200px;
+  max-width: 600px;
   margin: 0 auto;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   padding: 0 2rem;
 }
 
-.nav-brand h2 {
-  margin: 0;
-  color: white;
-  font-size: 1.5rem;
-}
+
+
 
 .nav-links {
   display: flex;

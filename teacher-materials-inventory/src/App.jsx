@@ -27,7 +27,8 @@ export default function App() {
   const [showBin, setShowBin] = useState(false);
   const [showUsers, setShowUsers] = useState(false);
 
-  const [page, setPage] = useState('inventory');
+  const [page, setPage] = useState('home');
+
   const [previewUrl, setPreviewUrl] = useState(null);
   const [toasts, setToasts] = useState([]);
 
@@ -104,31 +105,19 @@ export default function App() {
   if (!token) {
     return (
       <div>
-        <Navbar page="home" setPage={() => {}} darkMode={darkMode} />
-        <Landing setToken={setToken} />
+        <Navbar page="home" setPage={setPage} darkMode={darkMode} />
+        {page === 'about' && <About />}
+        {page === 'contact' && <Contact />}
+        {page === 'home' && <Landing setToken={setToken} />}
+
       </div>
     );
   }
 
-  // Public pages
-  if (page === 'about') return (
-    <div>
-      <Navbar page="about" setPage={setPage} darkMode={darkMode} />
-      <About />
-    </div>
-  );
-
-  if (page === 'contact') return (
-    <div>
-      <Navbar page="contact" setPage={setPage} darkMode={darkMode} />
-      <Contact />
-    </div>
-  );
-
-  // Inventory (authenticated)
+  // Inventory (authenticated) - No navbar inside app
   return (
     <div>
-      <Navbar page="inventory" setPage={setPage} darkMode={darkMode} />
+
       
       {/* Modals */}
       {previewUrl && <PreviewModal url={previewUrl} onClose={() => setPreviewUrl(null)} />}

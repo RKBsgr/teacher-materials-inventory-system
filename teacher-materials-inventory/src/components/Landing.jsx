@@ -95,8 +95,9 @@ export default function Landing({ setToken }) {
             autoComplete="new-password"
           />
           <button type="button" className="password-toggle" onClick={togglePassword} tabIndex="-1">
-            {showPassword ? "⌣" : "👁"}
+            {showPassword ? "⌣" : "▻"}
           </button>
+
         </div>
 
         {error && (
