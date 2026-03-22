@@ -12,27 +12,10 @@ export default function MaterialCard({ material, token, API, loadMaterials, isGr
     } catch {}
   }
 
+  const fileUrl = material.url;
 
-
-  const viewUrl = '${fileUrl}?download=false';
-  const downloadUrl = '${fileUrl}?download=true';
-
-  /*removed
-  const downloadUrl = fileUrl.includes("cloudinary")
-    ? fileUrl.replace("/upload/", "/upload/fl_attachment/")
-    : fileUrl;*/
-
-/*
-  const getCloudinaryUrl = (baseUrl, attachment = false) => {
-    if (!baseUrl.includes('cloudinary')) return baseUrl;
-    const parts = baseUrl.split('/upload/');
-    const afterUpload = parts[1];
-    const beforeVersion = afterUpload.split('/v')[0];
-    const versionAndAfter = afterUpload.split('/v')[1] || '';
-    return parts[0] + '/upload/' + (attachment ? 'fl_attachment/' : '') + beforeVersion + (versionAndAfter ? '/v' + versionAndAfter : '');
-  };
-  const viewUrl = getCloudinaryUrl(fileUrl, false);
-  const downloadUrl = getCloudinaryUrl(fileUrl, true);*/
+  const viewUrl = `${fileUrl}?download=false`;
+  const downloadUrl = `${fileUrl}?download=true`;
 
   // Extract file extension
     const getFileExtension = () => {
