@@ -10,16 +10,18 @@ const app = express();
 const PORT = process.env.PORT || 5000;
 
 //added
-const cloudinary = require("cloudinary").v2;
-const { CloudinaryStorage } = require("multer-storage-cloudinary");
-const fs = require("fs");
-const path = require("path");
+const { createClient } = require("@supabase/supabase-js");
 
+const supabase = createClient(
+  process.env.SUPABASE_URL,
+  process.env.SUPABASE_ANON_KEY
+);
+/*
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET
-});
+});*/
 
 /* ===================== MIDDLEWARE ===================== */
 
@@ -51,7 +53,8 @@ app.use(express.json());
   }
 });*/
 
-const upload = multer({ dest: "temp/" });
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 /*removed
 const upload = multer({
@@ -266,21 +269,43 @@ app.post(
       let filePath;
 
       if (req.file) {
-const result = await cloudinary.uploader.upload(req.file.path, {
-          folder: "materials",
-          resource_type: "raw",
-          public_id: req.file.originalname,
-          use_filename: true,
-          unique_filename: false,
-          flags: "attachment",
-          format: path.extname(req.file.originalname).slice(1) || "pdf"
-        });
+        const fileName = `${Date.now()}-${req.file.originalname.replace(/\s+/g, "_")}`;
 
-        filePath = result.secure_url;
+        const { data, error } = await supabase.storage
+          .from("materials")
+          .upload(fileName, req.file.buffer, {
+            contentType: req.file.mimetype
+          });
+
+        if (error) {
+          console.error(error);
+          return res.status(500).json({ message: "Upload failed" });
+        }
+
+        const { data: publicUrlData } = supabase.storage
+          .from("materials")
+          .getPublicUrl(fileName);
+
+        filePath = publicUrlData.publicUrl;
+
       } else if (req.body.url) {
         filePath = req.body.url;
       } else {
         return res.status(400).json({ message: "File or URL required" });
+      }
+
+      const existing = await materials.findOne({
+        $or: [
+          { title: req.body.title, subject: req.body.subject },
+          { url: filePath }
+        ],
+        deleted: { $ne: true }
+      });
+
+      if (existing) {
+        return res.status(400).json({
+          message: "Duplicate material detected"
+        });
       }
 
       await materials.insertOne({
@@ -299,7 +324,7 @@ const result = await cloudinary.uploader.upload(req.file.path, {
       res.json({ message: "Material added" });
 
     } catch (err) {
-      console.error("UPLOAD ERROR:", err);
+      console.error(err);
       res.status(500).json({ message: "Upload failed" });
     }
   }
