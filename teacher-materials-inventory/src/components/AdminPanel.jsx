@@ -63,11 +63,12 @@ export default function AdminPanel({
       body: formData
     });
 
-    if (!res.ok) {
-      const err = await res.json();
-      alert(err.message || "Failed to add material");
-      return;
-    }
+      if (!res.ok) {
+        const err = await res.json();
+        console.error(err.message || "Failed to add material");
+        // Use toast instead of alert - addToast passed as prop
+        return;
+      }
 
     // reload materials
     loadMaterials();
