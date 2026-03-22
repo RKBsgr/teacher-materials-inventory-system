@@ -13,6 +13,7 @@ const PORT = process.env.PORT || 5000;
 const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const fs = require("fs");
+const path = require("path");
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -265,12 +266,14 @@ app.post(
       let filePath;
 
       if (req.file) {
-        const result = await cloudinary.uploader.upload(req.file.path, {
+const result = await cloudinary.uploader.upload(req.file.path, {
           folder: "materials",
           resource_type: "raw",
-          public_id: req.file.originalname, // ✅ keeps filename + extension
+          public_id: req.file.originalname,
           use_filename: true,
-          unique_filename: false
+          unique_filename: false,
+          flags: "attachment",
+          format: path.extname(req.file.originalname).slice(1) || "pdf"
         });
 
         filePath = result.secure_url;
