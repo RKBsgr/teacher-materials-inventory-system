@@ -14,7 +14,7 @@ export default function MaterialCard({ material, token, API, loadMaterials, isGr
 
   const fileUrl = material.url;
 
-  const viewUrl = `${fileUrl}?download=false`;
+  const viewUrl = fileUrl;
   const downloadUrl = `${fileUrl}?download=true`;
 
   // Extract file extension
