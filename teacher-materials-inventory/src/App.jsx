@@ -1,7 +1,12 @@
+
 import { useEffect, useState } from "react";
 import Header from "./components/Header";
+import Navbar from "./components/Navbar";
+import About from "./components/About";
+import Contact from "./components/Contact";
+import PreviewModal from "./components/PreviewModal";
+import Toast from "./components/Toast";
 import Sidebar from "./components/Sidebar";
-//import Login from "./components/Login";
 import AdminPanel from "./components/AdminPanel";
 import MaterialCard from "./components/MaterialCard";
 import RecycleBin from "./components/RecycleBin";
@@ -16,35 +21,35 @@ export default function App() {
   const [bin, setBin] = useState([]);
   const [types, setTypes] = useState([]);
 
-  /*removed adminToken, added user state
-  const [adminToken, setAdminToken] = useState(null);*/
-  //added
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [user, setUser] = useState(null);
 
-  const [showLogin, setShowLogin] = useState(false);
   const [showBin, setShowBin] = useState(false);
   const [showUsers, setShowUsers] = useState(false);
 
-  const [viewMode, setViewMode] = useState(() => {
-    // initialize from local storage for this device only
-    return localStorage.getItem("viewMode") || "list";
-  });
+  const [page, setPage] = useState('inventory');
+  const [previewUrl, setPreviewUrl] = useState(null);
+  const [toasts, setToasts] = useState([]);
+
+  const [viewMode, setViewMode] = useState(localStorage.getItem("viewMode") || "list");
   const [darkMode, setDarkMode] = useState(false);
 
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [search, setSearch] = useState("");
+  const [filters, setFilters] = useState({ subject: "", type: "", category: "" });
+
+  // Effects
   useEffect(() => {
     localStorage.setItem("viewMode", viewMode);
   }, [viewMode]);
 
-  //added
   useEffect(() => {
     const savedToken = localStorage.getItem("token");
     if (savedToken) setToken(savedToken);
   }, []);
-  //addedstep3
+
   useEffect(() => {
     if (!token) return;
-
     try {
       const payload = JSON.parse(atob(token.split(".")[1]));
       setUser(payload);
@@ -53,46 +58,10 @@ export default function App() {
     }
   }, [token]);
 
-  const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [search, setSearch] = useState("");
-
-  const [filters, setFilters] = useState({
-    subject: "",
-    type: "",
-    category: ""
-  });
-
-  /* ================= VERIFY TOKEN ================= */
-
-/*removed admin token verification from app load, added user token verification
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) return;
-
-    fetch(`${API}/api/admin/verify`, {
-      headers: { Authorization: token }
-    })
-      .then(res => res.ok ? res.json() : Promise.reject())
-      .then(() => setAdminToken(token))
-      .catch(() => {
-        localStorage.removeItem("token");
-        setAdminToken(null);
-      });
-  }, []);*/
-
-  /* ================= LOAD DATA ================= */
-
-  useEffect(() => {
-    loadMaterials();
-  }, [filters]);
-
-  useEffect(() => {
-    loadSubjects();
-  }, []);
-
-  useEffect(() => {
-    loadTypes();
-  }, []);
+  // Load data
+  useEffect(() => loadMaterials(), [filters]);
+  useEffect(() => loadSubjects(), []);
+  useEffect(() => loadTypes(), []);
 
   async function loadMaterials() {
     const query = new URLSearchParams(filters).toString();
@@ -115,20 +84,11 @@ export default function App() {
       const res = await fetch(`${API}/api/materials/bin`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      const data = await res.json();
-      setBin(Array.isArray(data) ? data : []);
+      setBin(await res.json());
     } catch (err) {
       console.error("error loading bin", err);
-      setBin([]);
     }
   }
-
-  /*removed
-  function logoutAdmin() {
-    localStorage.removeItem("token");
-    setAdminToken(null);
-    setShowBin(false);
-  }*/
 
   const filteredMaterials = materials.filter(m => {
     const keyword = search.toLowerCase();
@@ -140,13 +100,47 @@ export default function App() {
     );
   });
 
-  //added
+  // Landing (no token)
   if (!token) {
-    return <Landing setToken={setToken} />;
+    return (
+      <div>
+        <Navbar page="home" setPage={() => {}} darkMode={darkMode} />
+        <Landing setToken={setToken} />
+      </div>
+    );
   }
 
+  // Public pages
+  if (page === 'about') return (
+    <div>
+      <Navbar page="about" setPage={setPage} darkMode={darkMode} />
+      <About />
+    </div>
+  );
+
+  if (page === 'contact') return (
+    <div>
+      <Navbar page="contact" setPage={setPage} darkMode={darkMode} />
+      <Contact />
+    </div>
+  );
+
+  // Inventory (authenticated)
   return (
-    <>
+    <div>
+      <Navbar page="inventory" setPage={setPage} darkMode={darkMode} />
+      
+      {/* Modals */}
+      {previewUrl && <PreviewModal url={previewUrl} onClose={() => setPreviewUrl(null)} />}
+      {toasts.map((toast, i) => (
+        <Toast 
+          key={i}
+          message={toast.message}
+          type={toast.type || 'info'}
+          onClose={() => setToasts(t => t.slice(1))}
+        />
+      ))}
+      
       <Header
         sidebarOpen={sidebarOpen}
         setSidebarOpen={setSidebarOpen}
@@ -169,11 +163,7 @@ export default function App() {
           setDarkMode={setDarkMode}
           showUsers={showUsers}
           setShowUsers={setShowUsers}
-        /> 
-        {/*removed
-        {showLogin && !adminToken && (
-          <Login onClose={() => setShowLogin(false)} />
-        )}*/}
+        />
 
         <main className="content">
           {showUsers ? (
@@ -209,6 +199,8 @@ export default function App() {
                       API={API}
                       loadMaterials={loadMaterials}
                       isGrid={viewMode === "grid"}
+                      onPreview={(url) => setPreviewUrl(url)}
+                      addToast={(msg, type = 'success') => setToasts(prev => [...prev, { message: msg, type }])}
                     />
                   ))}
                 </div>
@@ -228,6 +220,7 @@ export default function App() {
           )}
         </main>
       </div>
-    </>
+    </div>
   );
 }
+
