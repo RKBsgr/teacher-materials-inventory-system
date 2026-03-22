@@ -12,7 +12,7 @@ export default function MaterialCard({ material, token, API, loadMaterials, isGr
     } catch {}
   }
 
-  const fileUrl = material.url;
+
 
   const viewUrl = '${fileUrl}?download=false';
   const downloadUrl = '${fileUrl}?download=true';
