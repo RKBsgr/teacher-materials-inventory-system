@@ -1,3 +1,4 @@
+
 export default function About() {
   return (
     <div className="page-container">
@@ -29,4 +30,26 @@ export default function About() {
           <ul>
             <li>Frontend: React + Vite (Vercel)</li>
             <li>Backend: Node.js + Express (Render)</li>
-            <li>Database
+            <li>Database: MongoDB Atlas</li>
+            <li>Storage: Cloudinary</li>
+            <li>Auth: JWT</li>
+          </ul>
+        </div>
+
+        <div className="about-card">
+          <h3>🚀 Features</h3>
+          <ul>
+            <li>Material upload/download</li>
+            <li>Recycle bin (soft delete)</li>
+            <li>Search & filters</li>
+            <li>List/Grid views</li>
+            <li>Dark mode</li>
+            <li>Preview modals</li>
+            <li>Toast notifications</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  );
+}
+
