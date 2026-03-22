@@ -1,15 +1,22 @@
 import logo_view from "../assets/view-svgrepo-com.svg";
 import logo_download from "../assets/download-minimalistic-svgrepo-com.svg";
 
-export default function MaterialCard({ material, token, API, loadMaterials, isGrid }) {
-  async function deleteMaterial() {
+export default function MaterialCard({ material, token, API, loadMaterials, isGrid, addToast, onPreview }) {
+async function deleteMaterial() {
     try {
       const res = await fetch(`${API}/api/materials/${material._id}`, {
         method: "DELETE",
         headers: { Authorization: `Bearer ${token}` }
       });
-      if (res.ok) loadMaterials();
-    } catch {}
+      if (res.ok) {
+        loadMaterials();
+        addToast("Material moved to Recycle Bin!", "success");
+      } else {
+        addToast("Delete failed", "error");
+      }
+    } catch {
+      addToast("Network error", "error");
+    }
   }
 
   const fileUrl = material.url;

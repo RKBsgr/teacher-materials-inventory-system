@@ -11,29 +11,25 @@ export default function Contact() {
         <div className="contact-card">
           <div className="contact-icon">📧</div>
           <h3>Email</h3>
-          <p>teacher.materials.inventory@example.com</p>
-          <a href="mailto:teacher.materials.inventory@example.com" className="contact-link">Send Email</a>
+          <p>keanu.basagre2004@gmail.com</p>
+          <a href="keanu.basagre2004@gmail.com" className="contact-link">Send Email</a>
         </div>
 
         <div className="contact-card">
           <div className="contact-icon">💬</div>
-          <h3>Support</h3>
-          <p>File issues or suggest features</p>
-          <a href="https://github.com/yourusername/teacher-materials-inventory/issues" className="contact-link" target="_blank" rel="noopener">GitHub Issues</a>
+          <h3>Members</h3>
+          <p>Basagre, Ransford Keanu C.</p>
+          <p>Castro, Catherine</p>
+          <p>Mañacop, Krissa Belle</p>
+          <p>Roxas, Kalvin Brent</p>
+          <a href="https://www.facebook.com/ransfordkeanu.basagre/" className="contact-link" target="_blank" rel="noopener">Send Message in Facebook</a>
         </div>
 
         <div className="contact-card">
           <div className="contact-icon">⭐</div>
           <h3>Contribute</h3>
           <p>Help improve the platform</p>
-          <a href="https://github.com/yourusername/teacher-materials-inventory" className="contact-link" target="_blank" rel="noopener">GitHub Repo</a>
-        </div>
-
-        <div className="contact-card">
-          <div className="contact-icon">📄</div>
-          <h3>Docs</h3>
-          <p>Setup, API docs, troubleshooting</p>
-          <a href="/README.md" className="contact-link">Read Documentation</a>
+          <a href="https://github.com/RKBsgr" className="contact-link" target="_blank" rel="noopener">GitHub</a>
         </div>
       </div>
     </div>

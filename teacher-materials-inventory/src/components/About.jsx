@@ -31,7 +31,7 @@ export default function About() {
             <li>Frontend: React + Vite (Vercel)</li>
             <li>Backend: Node.js + Express (Render)</li>
             <li>Database: MongoDB Atlas</li>
-            <li>Storage: Cloudinary</li>
+            <li>Storage: Supabase</li>
             <li>Auth: JWT</li>
           </ul>
         </div>

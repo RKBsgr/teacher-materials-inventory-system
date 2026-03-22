@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import Header from "./components/Header";
 import Navbar from "./components/Navbar";
@@ -101,24 +100,27 @@ export default function App() {
     );
   });
 
-  // Landing (no token)
+  // Landing (no token) - All sections scrollable
   if (!token) {
     return (
       <div>
-        <Navbar page="home" setPage={setPage} darkMode={darkMode} />
-        {page === 'about' && <About />}
-        {page === 'contact' && <Contact />}
-        {page === 'home' && <Landing setToken={setToken} />}
-
+        <Navbar page={page} setPage={setPage} darkMode={darkMode} />
+        <section id="home">
+          <Landing setToken={setToken} />
+        </section>
+        <section id="about">
+          <About />
+        </section>
+        <section id="contact">
+          <Contact />
+        </section>
       </div>
     );
   }
 
-  // Inventory (authenticated) - No navbar inside app
+  // Inventory (authenticated)
   return (
     <div>
-
-      
       {/* Modals */}
       {previewUrl && <PreviewModal url={previewUrl} onClose={() => setPreviewUrl(null)} />}
       {toasts.map((toast, i) => (
