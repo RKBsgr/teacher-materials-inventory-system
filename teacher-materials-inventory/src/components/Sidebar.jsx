@@ -21,10 +21,8 @@ export default function Sidebar({
 
         <h4 className="section-title">Sort by</h4>
         <select
-          value={filters.category}
-          onChange={e => {
-  console.log("CHANGE WORKS", e.target.value);
-}}
+          value={filters.category || ""}
+          onChange={e => setFilters(prevFilters => ({ ...prevFilters, category: e.target.value }))}
         >
           <option value="">All Categories</option>
           <option value="Uploaded">Uploaded</option>
@@ -32,8 +30,8 @@ export default function Sidebar({
         </select>
 
         <select
-          value={filters.subject}
-          onChange={e => setFilters({ ...filters, subject: e.target.value })}
+          value={filters.subject || ""}
+          onChange={e => setFilters(prevFilters => ({ ...prevFilters, subject: e.target.value }))}
         >
           <option value="">All Subjects</option>
           {subjects.map(s => (
@@ -42,8 +40,8 @@ export default function Sidebar({
         </select>
 
         <select
-          value={filters.type}
-          onChange={e => setFilters({ ...filters, type: e.target.value })}
+          value={filters.type || ""}
+          onChange={e => setFilters(prevFilters => ({ ...prevFilters, type: e.target.value }))}
         >
           <option value="">All Types</option>
           {types.map(t => <option key={t} value={t}>{t}</option>)}
@@ -115,4 +113,4 @@ export default function Sidebar({
   );
 }
 
-console.log("setFilters type:", typeof setFilters);
+
