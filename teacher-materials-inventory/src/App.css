@@ -398,6 +398,18 @@ body {
   font-size: 12px;
   font-weight: 500;
   color: #4f7cff;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+}
+
+.preview-btn.action-link:hover {
+  background: #f0f4ff;
+  transform: scale(1.05);
 }
 
 .action-link:hover {
