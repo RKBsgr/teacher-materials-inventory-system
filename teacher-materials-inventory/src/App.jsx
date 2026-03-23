@@ -39,6 +39,10 @@ export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [search, setSearch] = useState("");
   const [filters, setFilters] = useState({ subject: "", type: "", category: "" });
+  
+  const stableSetFilters = useCallback(setFilters, []);
+  const stableSetViewMode = useCallback(setViewMode, []);
+  const stableSetDarkMode = useCallback(setDarkMode, []); 
 
   // Effects
   useEffect(() => {
@@ -183,13 +187,13 @@ export default function App() {
         <Sidebar
           sidebarOpen={sidebarOpen}
           filters={filters}
-          setFilters={setFilters}
+          setFilters={stableSetFilters}
           subjects={subjects}
           types={types}
           viewMode={viewMode}
-          setViewMode={setViewMode}
+          setViewMode={stableSetViewMode}
           darkMode={darkMode}
-          setDarkMode={setDarkMode}
+          setDarkMode={stableSetDarkMode}
           showUsers={showUsers}
           setShowUsers={setShowUsers}
           showNotifications={showNotifications}
