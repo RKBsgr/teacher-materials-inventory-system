@@ -233,6 +233,29 @@ app.get("/api/notifications", verifyUser, async (req, res) => {
   }
 });
 
+// Delete single notification
+app.delete("/api/notifications/:id", verifyUser, async (req, res) => {
+  try {
+    const result = await notifications.deleteOne({ _id: new ObjectId(req.params.id) });
+    if (result.deletedCount === 0) {
+      return res.status(404).json({ message: "Notification not found" });
+    }
+    res.json({ message: "Notification deleted" });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to delete notification" });
+  }
+});
+
+// Delete all notifications
+app.delete("/api/notifications", verifyUser, async (req, res) => {
+  try {
+    const result = await notifications.deleteMany({});
+    res.json({ message: `${result.deletedCount} notifications cleared` });
+  } catch (err) {
+    res.status(500).json({ message: "Failed to clear notifications" });
+  }
+});
+
 // Add notification (internal use)
 async function addNotification(title, subject, action, username) {
   try {
