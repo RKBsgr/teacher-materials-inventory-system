@@ -895,9 +895,22 @@ button.danger {
 /* ===== ABOUT GRID ===== */
 .about-grid, .contact-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
   margin-top: 3rem;
+  max-width: 1400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+@media (max-width: 1400px) {
+  .about-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 768px) {
+  .about-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .about-card, .contact-card {
@@ -1006,15 +1019,24 @@ section {
 
 /* ===== LANDING CONTAINER ===== */
 .landing-container {
-  min-height: 100vh;
-
+  height: 100vh;
+  margin: 0;
+  padding: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.3)), url("../src/assets/library_entrance.jpg") no-repeat center center fixed;
-  background-size: cover;
-  padding: 20px;
-  box-sizing: border-box;
+  background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.3)), url("../src/assets/library_entrance.jpg") no-repeat center center / cover fixed;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden;
+}
+
+#root {
+  height: 100vh;
 }
 
 .landing-card {
