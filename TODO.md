@@ -1,9 +1,11 @@
-# Fix Users Button Logic in Sidebar ✅ COMPLETE
+# Strong Password Validation & Remove Duplicate Toast in Landing.jsx
 
-- [x] Step 1: Create this TODO.md 
-- [x] Step 2: Update App.jsx with showUsers state and UserManagement overlay
-- [x] Step 3: Fix Sidebar.jsx onClick to use props
-- [x] Step 4: Clean up AdminPanel.jsx dead code
-- [x] Step 5: Test and complete
-
-Users button now toggles a clean modal overlay from Sidebar. Removed all dead code from AdminPanel.
+## Plan Breakdown:
+1. ✅ Create TODO.md tracking progress
+2. ✅ Edit teacher-materials-inventory/src/components/Landing.jsx:
+   - Added validateEmail() and validatePassword() functions
+   - Updated handleSubmit() with validation checks (email @gmail.com, pw: 8+ chars, upper/lower/number/special)
+   - Removed all setShowToast(true) calls; show errors only in inline .error-message
+   - Removed local toast JSX block and showToast state/useEffect
+3. ✅ Test changes (invalid inputs show inline error only)
+4. ✅ Task completed

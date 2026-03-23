@@ -10,7 +10,6 @@ export default function Landing({ setToken }) {
     password: ""
   });
   const [error, setError] = useState("");
-  const [showToast, setShowToast] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   function handleChange(e) {
@@ -22,20 +21,44 @@ export default function Landing({ setToken }) {
     setShowPassword(!showPassword);
   }
 
-  useEffect(() => {
-    if (showToast) {
-      const timer = setTimeout(() => {
-        setShowToast(false);
-        setError("");
-      }, 4000);
-      return () => clearTimeout(timer);
+
+
+  function validateEmail(email) {
+    if (!email.endsWith('@gmail.com')) {
+      return 'Email must end with @gmail.com';
     }
-  }, [showToast]);
+    return '';
+  }
+
+  function validatePassword(password) {
+    if (password.length < 8) {
+      return 'Password must be at least 8 characters long';
+    }
+    if (!/[a-z]/.test(password)) {
+      return 'Password must contain at least one lowercase letter';
+    }
+    if (!/[A-Z]/.test(password)) {
+      return 'Password must contain at least one uppercase letter';
+    }
+    if (!/[0-9]/.test(password)) {
+      return 'Password must contain at least one number';
+    }
+    if (!/[!@#$%^&*]/.test(password)) {
+      return 'Password must contain at least one special character (!@#$%^&*)';
+    }
+    return '';
+  }
 
   async function handleSubmit() {
-    if (!form.email.includes('@')) {
-      setError('Please enter a valid email address');
-      setShowToast(true);
+    const emailErr = validateEmail(form.email);
+    if (emailErr) {
+      setError(emailErr);
+      return;
+    }
+
+    const pwErr = validatePassword(form.password);
+    if (pwErr) {
+      setError(pwErr);
       return;
     }
 
@@ -58,7 +81,6 @@ export default function Landing({ setToken }) {
       setToken(data.token);
     } else {
       setError(data.message || "Something went wrong");
-      setShowToast(true);
     }
   }
 
@@ -115,15 +137,6 @@ export default function Landing({ setToken }) {
           }
         </p>
 
-        {showToast && (
-          <div className="toast" onClick={() => {
-            setShowToast(false);
-            setError("");
-          }}>
-            {error}
-            <span className="toast-close">&times;</span>
-          </div>
-        )}
       </div>
     </div>
   );
