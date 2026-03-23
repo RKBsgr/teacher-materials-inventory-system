@@ -372,7 +372,8 @@ body {
 }
 
 .action-icons a,
-.action-link {
+.action-link,
+.action-icons-preview {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -383,6 +384,11 @@ body {
   transition: 0.2s ease;
   text-decoration: none;
   color: #64748b;
+}
+
+.action-icons-preview:hover {
+  background: #e5e7eb;
+  transform: scale(1.05);
 }
 
 .action-icons a:hover,
