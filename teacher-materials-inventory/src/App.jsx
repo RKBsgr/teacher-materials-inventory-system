@@ -181,7 +181,9 @@ export default function App() {
         <Sidebar
           sidebarOpen={sidebarOpen}
           filters={filters}
-          setFilters={setFilters}
+          setFilters={(data) => {
+            console.log("SET FILTERS CALLED", data);
+          }}
           subjects={subjects}
           types={types}
           viewMode={viewMode}

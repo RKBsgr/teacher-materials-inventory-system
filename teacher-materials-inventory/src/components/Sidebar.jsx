@@ -15,7 +15,7 @@ export default function Sidebar({
 }) {
   return (
     <aside className={`sidebar ${sidebarOpen ? "" : "collapsed"}`}>
-
+      
       <div className="sidebar-section">
         <h3>Browse</h3>
 
@@ -36,7 +36,9 @@ export default function Sidebar({
           onChange={e => setFilters({ ...filters, subject: e.target.value })}
         >
           <option value="">All Subjects</option>
-          {subjects.map(s => (<option key={s}>{s}</option>))}
+          {subjects.map(s => (
+            <option key={s} value={s}>{s}</option>
+          ))}
         </select>
 
         <select
