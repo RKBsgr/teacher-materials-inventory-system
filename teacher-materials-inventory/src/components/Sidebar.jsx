@@ -79,13 +79,13 @@ export default function Sidebar({
           className="secondary"
           onClick={() => setShowUsers(!showUsers)}
         >
-          Users
+          {showUsers ? '📋 Inventory' : '👥 Users'}
         </button>
         <button
           className="secondary"
           onClick={() => setShowNotifications(!showNotifications)}
         >
-          🔔 Notifications
+          {showNotifications ? '📋 Inventory' : '🔔 Notifications'}
         </button>
 
         <h4 className="section-title">Account</h4>
