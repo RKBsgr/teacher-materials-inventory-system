@@ -22,7 +22,9 @@ export default function Sidebar({
         <h4 className="section-title">Sort by</h4>
         <select
           value={filters.category}
-          onChange={e => setFilters({ ...filters, category: e.target.value })}
+          onChange={e => {
+  console.log("CHANGE WORKS", e.target.value);
+}}
         >
           <option value="">All Categories</option>
           <option value="Uploaded">Uploaded</option>
@@ -34,7 +36,7 @@ export default function Sidebar({
           onChange={e => setFilters({ ...filters, subject: e.target.value })}
         >
           <option value="">All Subjects</option>
-          {subjects.map(s => <option key={s}>{s}</option>)}
+          {subjects.map(s => (<option key={s}>{s}</option>))}
         </select>
 
         <select
@@ -110,3 +112,5 @@ export default function Sidebar({
     </aside>
   );
 }
+
+console.log("setFilters type:", typeof setFilters);
