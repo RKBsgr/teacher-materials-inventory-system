@@ -13,6 +13,8 @@ export default function Sidebar({
   showNotifications,
   setShowNotifications,
 }) {
+  console.log("setFilters type:", typeof setFilters);
+  console.log("filters:", filters);
   return (
     <aside className={`sidebar ${sidebarOpen ? "" : "collapsed"}`}>
       
