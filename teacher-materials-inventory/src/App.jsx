@@ -143,7 +143,7 @@ export default function App() {
     return (
       <div>
         <Navbar page={page} setPage={setPage} darkMode={darkMode} />
-        <section id="home">
+        <section id="home" className="landing-section">
           <Landing setToken={setToken} />
         </section>
         <section id="about">
