@@ -1019,6 +1019,10 @@ section {
 
 /* ===== LANDING CONTAINER ===== */
 .landing-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
   height: 100vh;
   margin: 0;
   padding: 0;
@@ -1026,17 +1030,17 @@ section {
   justify-content: center;
   align-items: center;
   background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.3)), url("../src/assets/library_entrance.jpg") no-repeat center center / cover fixed;
+  z-index: 1;
 }
 
 html, body {
   margin: 0;
   padding: 0;
   height: 100%;
-  overflow: hidden;
 }
 
 #root {
-  height: 100vh;
+  min-height: 100vh;
 }
 
 .landing-card {
