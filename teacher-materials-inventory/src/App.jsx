@@ -66,10 +66,31 @@ export default function App() {
   useEffect(() => loadTypes(), []);
 
   async function loadMaterials() {
+    try {
+      const query = new URLSearchParams(filters).toString();
+      const res = await fetch(`${API}/api/materials?${query}`);
+      const data = await res.json();
+
+      if (!Array.isArray(data)) {
+        console.error("❌ Invalid materials response:", data);
+        setMaterials([]); // prevent crash
+        return;
+      }
+
+      setMaterials(data);
+
+    } catch (err) {
+      console.error("❌ Fetch error:", err);
+      setMaterials([]);
+    }
+  }
+
+  /*removed
+  async function loadMaterials() {
     const query = new URLSearchParams(filters).toString();
     const res = await fetch(`${API}/api/materials?${query}`);
     setMaterials(await res.json());
-  }
+  }*/
 
   async function loadSubjects() {
     const res = await fetch(`${API}/api/subjects`);
@@ -92,6 +113,19 @@ export default function App() {
     }
   }
 
+  const filteredMaterials = Array.isArray(materials)
+    ? materials.filter(m => {
+        const keyword = (search || "").toLowerCase();
+        return (
+          m.title?.toLowerCase().includes(keyword) ||
+          m.subject?.toLowerCase().includes(keyword) ||
+          m.type?.toLowerCase().includes(keyword) ||
+          m.category?.toLowerCase().includes(keyword)
+        );
+      })
+    : [];
+
+  /*removed
   const filteredMaterials = materials.filter(m => {
     const keyword = search.toLowerCase();
     return (
@@ -100,7 +134,7 @@ export default function App() {
       m.type?.toLowerCase().includes(keyword) ||
       m.category?.toLowerCase().includes(keyword)
     );
-  });
+  });*/
 
   // Landing (no token) - All sections scrollable
   if (!token) {
