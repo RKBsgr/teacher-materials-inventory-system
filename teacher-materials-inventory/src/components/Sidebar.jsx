@@ -13,8 +13,6 @@ export default function Sidebar({
   showNotifications,
   setShowNotifications,
 }) {
-  console.log("setFilters type:", typeof setFilters);
-  console.log("filters:", filters);
   return (
     <aside className={`sidebar ${sidebarOpen ? "" : "collapsed"}`}>
       
@@ -24,7 +22,7 @@ export default function Sidebar({
         <h4 className="section-title">Sort by</h4>
         <select
           value={filters.category || ""}
-          onChange={e => setFilters(prevFilters => ({ ...prevFilters, category: e.target.value }))}
+          onChange={e => setFilters(prev => ({ ...prev, category: e.target.value }))}
         >
           <option value="">All Categories</option>
           <option value="Uploaded">Uploaded</option>
@@ -33,7 +31,7 @@ export default function Sidebar({
 
         <select
           value={filters.subject || ""}
-          onChange={e => setFilters(prevFilters => ({ ...prevFilters, subject: e.target.value }))}
+          onChange={e => setFilters(prev => ({ ...prev, subject: e.target.value }))}
         >
           <option value="">All Subjects</option>
           {subjects.map(s => (
@@ -43,10 +41,12 @@ export default function Sidebar({
 
         <select
           value={filters.type || ""}
-          onChange={e => setFilters(prevFilters => ({ ...prevFilters, type: e.target.value }))}
+          onChange={e => setFilters(prev => ({ ...prev, type: e.target.value }))}
         >
           <option value="">All Types</option>
-          {types.map(t => <option key={t} value={t}>{t}</option>)}
+          {types.map(t => (
+            <option key={t} value={t}>{t}</option>
+          ))}
         </select>
 
         <h4 className="section-title">Change Mode</h4>
@@ -114,5 +114,3 @@ export default function Sidebar({
     </aside>
   );
 }
-
-
