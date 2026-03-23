@@ -20,9 +20,6 @@ export default function PreviewModal({ url, onClose }) {
           <a href={url} target="_blank" rel="noopener noreferrer" className="preview-btn">
             🔗 Open Fullscreen
           </a>
-          <a href={url} download className="preview-btn download">
-            ⬇️ Download
-          </a>
         </div>
       </div>
     </div>
