@@ -1,10 +1,11 @@
+import { useCallback } from "react";
 import logo_view from "../assets/view-svgrepo-com.svg";
 import logo_download from "../assets/download-minimalistic-svgrepo-com.svg";
 
 export default function MaterialCard({ material, token, API, loadMaterials, isGrid, addToast, onPreview }) {
 if (!material || !material.url) return null;  
 
-async function deleteMaterial() {
+const deleteMaterial = useCallback(async () => {
     try {
       const res = await fetch(`${API}/api/materials/${material._id}`, {
         method: "DELETE",
@@ -19,7 +20,7 @@ async function deleteMaterial() {
     } catch {
       addToast("Network error", "error");
     }
-  }
+  }, [material._id, API, token, loadMaterials, addToast]);
 
   const fileUrl = material.url;
 

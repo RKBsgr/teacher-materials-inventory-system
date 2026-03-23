@@ -65,11 +65,17 @@ export default function App() {
   }, [token]);
 
   // Load data
-  useEffect(() => loadMaterials(), [filters]);
-  useEffect(() => loadSubjects(), []);
-  useEffect(() => loadTypes(), []);
+useEffect(() => {
+    loadMaterials();
+  }, [loadMaterials]);
+useEffect(() => {
+    loadSubjects();
+  }, [loadSubjects]);
+  useEffect(() => {
+    loadTypes();
+  }, [loadTypes]);
 
-  async function loadMaterials() {
+const loadMaterials = useCallback(async () => {
     try {
       const query = new URLSearchParams(filters).toString();
       const res = await fetch(`${API}/api/materials?${query}`);
@@ -87,7 +93,7 @@ export default function App() {
       console.error("❌ Fetch error:", err);
       setMaterials([]);
     }
-  }
+  }, [filters, API, setMaterials]);
 
   /*removed
   async function loadMaterials() {
@@ -96,15 +102,23 @@ export default function App() {
     setMaterials(await res.json());
   }*/
 
-  async function loadSubjects() {
+  const loadSubjects = useCallback(async () => {
     const res = await fetch(`${API}/api/subjects`);
     setSubjects(await res.json());
-  }
+  }, [API, setSubjects]);
 
-  async function loadTypes() {
+  const loadTypes = useCallback(async () => {
     const res = await fetch(`${API}/api/types`);
     setTypes(await res.json());
-  }
+  }, [API, setTypes]);
+
+  const addToast = useCallback((msg, type = 'success') => {
+    setToasts(prev => [...prev, { message: msg, type }]);
+  }, []);
+
+  const handlePreview = useCallback((url) => {
+    setPreviewUrl(url);
+  }, []);
 
   async function loadBin() {
     try {
@@ -117,10 +131,9 @@ export default function App() {
     }
   }
 
-  const filteredMaterials = Array.isArray(materials)
-  ? materials.filter(m => {
-      if (!m || typeof m !== "object") return false;
-
+  const filteredMaterials = useMemo(() => {
+    return (Array.isArray(materials) ? materials : []).filter(m => {
+      if (!m || !m._id || !m.url) return false;
       const keyword = (search || "").toLowerCase();
       return (
         m.title?.toLowerCase().includes(keyword) ||
@@ -128,8 +141,8 @@ export default function App() {
         m.type?.toLowerCase().includes(keyword) ||
         m.category?.toLowerCase().includes(keyword)
       );
-    })
-  : [];
+    });
+  }, [materials, search]);
 
   /*removed
   const filteredMaterials = materials.filter(m => {
@@ -238,8 +251,8 @@ export default function App() {
                       API={API}
                       loadMaterials={loadMaterials}
                       isGrid={viewMode === "grid"}
-                      onPreview={(url) => setPreviewUrl(url)}
-                      addToast={(msg, type = 'success') => setToasts(prev => [...prev, { message: msg, type }])}
+                      onPreview={handlePreview}
+                      addToast={addToast}
                     />
                   ))}
                 </div>
