@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useMemo } from "react";
 import Header from "./components/Header";
 import Navbar from "./components/Navbar";
 import About from "./components/About";
@@ -42,40 +42,10 @@ export default function App() {
   
   const stableSetFilters = useCallback(setFilters, []);
   const stableSetViewMode = useCallback(setViewMode, []);
-  const stableSetDarkMode = useCallback(setDarkMode, []); 
+  const stableSetDarkMode = useCallback(setDarkMode, []);
 
-  // Effects
-  useEffect(() => {
-    localStorage.setItem("viewMode", viewMode);
-  }, [viewMode]);
-
-  useEffect(() => {
-    const savedToken = localStorage.getItem("token");
-    if (savedToken) setToken(savedToken);
-  }, []);
-
-  useEffect(() => {
-    if (!token) return;
-    try {
-      const payload = JSON.parse(atob(token.split(".")[1]));
-      setUser(payload);
-    } catch (err) {
-      console.error("Invalid token");
-    }
-  }, [token]);
-
-  // Load data
-useEffect(() => {
-    loadMaterials();
-  }, [loadMaterials]);
-useEffect(() => {
-    loadSubjects();
-  }, [loadSubjects]);
-  useEffect(() => {
-    loadTypes();
-  }, [loadTypes]);
-
-const loadMaterials = useCallback(async () => {
+  // Stable data loaders & handlers - ALL defined BEFORE useEffect
+  const loadMaterials = useCallback(async () => {
     try {
       const query = new URLSearchParams(filters).toString();
       const res = await fetch(`${API}/api/materials?${query}`);
@@ -83,24 +53,16 @@ const loadMaterials = useCallback(async () => {
 
       if (!Array.isArray(data)) {
         console.error("❌ Invalid materials response:", data);
-        setMaterials([]); // prevent crash
+        setMaterials([]); 
         return;
       }
 
       setMaterials(data);
-
     } catch (err) {
       console.error("❌ Fetch error:", err);
       setMaterials([]);
     }
   }, [filters, API, setMaterials]);
-
-  /*removed
-  async function loadMaterials() {
-    const query = new URLSearchParams(filters).toString();
-    const res = await fetch(`${API}/api/materials?${query}`);
-    setMaterials(await res.json());
-  }*/
 
   const loadSubjects = useCallback(async () => {
     const res = await fetch(`${API}/api/subjects`);
@@ -114,11 +76,43 @@ const loadMaterials = useCallback(async () => {
 
   const addToast = useCallback((msg, type = 'success') => {
     setToasts(prev => [...prev, { message: msg, type }]);
-  }, []);
+  }, [setToasts]);
 
   const handlePreview = useCallback((url) => {
     setPreviewUrl(url);
+  }, [setPreviewUrl]);
+
+  // Effects - ALL reference stable callbacks above
+  useEffect(() => {
+    localStorage.setItem("viewMode", viewMode);
+  }, [viewMode]);
+
+  useEffect(() => {
+    const savedToken = localStorage.getItem("token");
+    if (savedToken) setToken(savedToken);
   }, []);
+
+  useEffect(() => {
+    loadMaterials();
+  }, [loadMaterials]);
+
+  useEffect(() => {
+    loadSubjects();
+  }, [loadSubjects]);
+
+  useEffect(() => {
+    loadTypes();
+  }, [loadTypes]);
+
+  useEffect(() => {
+    if (!token) return;
+    try {
+      const payload = JSON.parse(atob(token.split(".")[1]));
+      setUser(payload);
+    } catch (err) {
+      console.error("Invalid token");
+    }
+  }, [token]);
 
   async function loadBin() {
     try {
@@ -144,18 +138,7 @@ const loadMaterials = useCallback(async () => {
     });
   }, [materials, search]);
 
-  /*removed
-  const filteredMaterials = materials.filter(m => {
-    const keyword = search.toLowerCase();
-    return (
-      m.title?.toLowerCase().includes(keyword) ||
-      m.subject?.toLowerCase().includes(keyword) ||
-      m.type?.toLowerCase().includes(keyword) ||
-      m.category?.toLowerCase().includes(keyword)
-    );
-  });*/
-
-  // Landing (no token) - All sections scrollable
+  // Landing (no token)
   if (!token) {
     return (
       <div>
@@ -173,10 +156,9 @@ const loadMaterials = useCallback(async () => {
     );
   }
 
-  // Inventory (authenticated)
+  // Authenticated App
   return (
     <div>
-      {/* Modals */}
       {previewUrl && <PreviewModal url={previewUrl} onClose={() => setPreviewUrl(null)} />}
       {toasts.map((toast, i) => (
         <Toast 
@@ -190,8 +172,6 @@ const loadMaterials = useCallback(async () => {
       <Header
         sidebarOpen={sidebarOpen}
         setSidebarOpen={setSidebarOpen}
-        darkMode={darkMode}
-        setDarkMode={setDarkMode}
         search={search}
         setSearch={setSearch}
       />
@@ -240,9 +220,7 @@ const loadMaterials = useCallback(async () => {
 
               {!showBin && (
                 <div className={viewMode === "grid" ? "grid-layout" : "list-layout"}>
-                  {filteredMaterials
-                    .filter(m => m && m._id && m.url) // ✅ prevent bad data
-                    .map(m => (
+                  {filteredMaterials.map(m => (
                     <MaterialCard
                       key={m._id}
                       material={m}
@@ -275,4 +253,3 @@ const loadMaterials = useCallback(async () => {
     </div>
   );
 }
-
