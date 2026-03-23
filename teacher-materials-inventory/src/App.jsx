@@ -114,16 +114,18 @@ export default function App() {
   }
 
   const filteredMaterials = Array.isArray(materials)
-    ? materials.filter(m => {
-        const keyword = (search || "").toLowerCase();
-        return (
-          m.title?.toLowerCase().includes(keyword) ||
-          m.subject?.toLowerCase().includes(keyword) ||
-          m.type?.toLowerCase().includes(keyword) ||
-          m.category?.toLowerCase().includes(keyword)
-        );
-      })
-    : [];
+  ? materials.filter(m => {
+      if (!m || typeof m !== "object") return false;
+
+      const keyword = (search || "").toLowerCase();
+      return (
+        m.title?.toLowerCase().includes(keyword) ||
+        m.subject?.toLowerCase().includes(keyword) ||
+        m.type?.toLowerCase().includes(keyword) ||
+        m.category?.toLowerCase().includes(keyword)
+      );
+    })
+  : [];
 
   /*removed
   const filteredMaterials = materials.filter(m => {
@@ -221,7 +223,9 @@ export default function App() {
 
               {!showBin && (
                 <div className={viewMode === "grid" ? "grid-layout" : "list-layout"}>
-                  {filteredMaterials.map(m => (
+                  {filteredMaterials
+                    .filter(m => m && m._id && m.url) // ✅ prevent bad data
+                    .map(m => (
                     <MaterialCard
                       key={m._id}
                       material={m}
