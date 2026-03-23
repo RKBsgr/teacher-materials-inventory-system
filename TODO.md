@@ -1,11 +1,8 @@
-# Strong Password Validation & Remove Duplicate Toast in Landing.jsx
+# Notification System ✅ COMPLETE
 
-## Plan Breakdown:
-1. ✅ Create TODO.md tracking progress
-2. ✅ Edit teacher-materials-inventory/src/components/Landing.jsx:
-   - Added validateEmail() and validatePassword() functions
-   - Updated handleSubmit() with validation checks (email @gmail.com, pw: 8+ chars, upper/lower/number/special)
-   - Removed all setShowToast(true) calls; show errors only in inline .error-message
-   - Removed local toast JSX block and showToast state/useEffect
-3. ✅ Test changes (invalid inputs show inline error only)
-4. ✅ Task completed
+All steps done:
+1. Backend: notifications collection, /api/notifications GET, auto-log on add/delete/restore.
+2. Frontend: Notifications.jsx panel, Sidebar "🔔 Notifications" button under Users, App.jsx toggle (all roles; Users admin-only).
+3. Format: "Material {title} for {subject} is {action} by {username}" + timestamp.
+
+Test: Login any role → Sidebar → Notifications → perform add/delete/restore → refresh to see logs.

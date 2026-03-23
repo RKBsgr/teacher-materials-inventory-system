@@ -25,6 +25,7 @@ export default function App() {
 
   const [showBin, setShowBin] = useState(false);
   const [showUsers, setShowUsers] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
 
   const [page, setPage] = useState('home');
 
@@ -154,11 +155,15 @@ export default function App() {
           setDarkMode={setDarkMode}
           showUsers={showUsers}
           setShowUsers={setShowUsers}
+          showNotifications={showNotifications}
+          setShowNotifications={setShowNotifications}
         />
 
         <main className="content">
           {showUsers ? (
             <UserManagement API={API} token={token} />
+          ) : showNotifications ? (
+            <Notifications API={API} token={token} />
           ) : (
             <>
               {(user?.role === "admin" || user?.role === "editor") && (

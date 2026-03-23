@@ -54,13 +54,10 @@ app.use(express.json());
 });*/
 
 const storage = multer.memoryStorage();
-const upload = multer({ storage });
-
-/*removed
 const upload = multer({
   storage,
-  limits: { fileSize: 50 * 1024 * 1024 } // 50MB limit
-});*/
+  limits: { fileSize: 10 * 1024 * 1024 } // 10MB limit
+});
 
 /* ===================== DATABASE ===================== */
 
@@ -70,6 +67,7 @@ let materials;
 let admins;
 //added
 let users;
+let notifications;
 
 async function connectDB() {
   try {
@@ -78,8 +76,8 @@ async function connectDB() {
 
     materials = db.collection("materials");
     admins = db.collection("admins");
-    //added
     users = db.collection("users");
+    notifications = db.collection("notifications");
 
     console.log("✅ MongoDB connected");
   } catch (err) {
@@ -225,6 +223,31 @@ app.put("/api/users/:id/role", verifyUser, requireEditor, async (req, res) => {
   }
 });
 
+// Get notifications (all roles)
+app.get("/api/notifications", verifyUser, async (req, res) => {
+  try {
+    const data = await notifications.find({}).sort({ createdAt: -1 }).limit(50).toArray();
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ message: "Failed to fetch notifications" });
+  }
+});
+
+// Add notification (internal use)
+async function addNotification(title, subject, action, username) {
+  try {
+    await notifications.insertOne({
+      title,
+      subject,
+      action,
+      username,
+      createdAt: new Date()
+    });
+  } catch (err) {
+    console.error("Failed to add notification:", err);
+  }
+}
+
 /* ===================== MATERIAL ROUTES ===================== */
 
 // Get materials (with filters)
@@ -321,6 +344,8 @@ app.post(
         createdAt: new Date()
       });
 
+      await addNotification(req.body.title, req.body.subject, 'added', req.user.username);
+
       res.json({ message: "Material added" });
 
     } catch (err) {
@@ -389,10 +414,17 @@ app.post(
 // Soft delete
 app.delete("/api/materials/:id", verifyUser, requireEditor, async (req, res) => {
   try {
+    const material = await materials.findOne({ _id: new ObjectId(req.params.id) });
+    if (!material) {
+      return res.status(404).json({ message: "Material not found" });
+    }
+
     await materials.updateOne(
       { _id: new ObjectId(req.params.id) },
       { $set: { deleted: true } }
     );
+
+    await addNotification(material.title, material.subject, 'deleted', req.user.username);
 
     res.json({ message: "Moved to bin" });
   } catch (err) {
@@ -406,10 +438,17 @@ app.post(
   verifyUser, requireEditor,
   async (req, res) => {
     try {
+      const material = await materials.findOne({ _id: new ObjectId(req.params.id) });
+      if (!material) {
+        return res.status(404).json({ message: "Material not found" });
+      }
+
       await materials.updateOne(
         { _id: new ObjectId(req.params.id) },
         { $set: { deleted: false } }
       );
+
+      await addNotification(material.title, material.subject, 'restored', req.user.username);
 
       res.json({ message: "Restored" });
     } catch (err) {
