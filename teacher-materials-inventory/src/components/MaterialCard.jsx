@@ -93,15 +93,13 @@ const deleteMaterial = useCallback(async () => {
           </a>
         ) : (
           <div className="action-icons">
-            <a 
-              href={viewUrl}
-              target="_blank"
-              rel="noreferrer"
+            <button 
+              onClick={() => onPreview(viewUrl)}
               title="Preview"
-              className="action-preview"
+              className="action-icons-preview"
             >
               <img src={logo_view} alt="Preview" width={18} height={18} />
-            </a>
+            </button>
             <a
               href={downloadUrl}
               title="Download"
