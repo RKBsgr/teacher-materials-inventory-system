@@ -48,7 +48,7 @@ async function deleteMaterial() {
     };
     return iconMap[ext] || "📎";
   };
-  console.log("materials:", materials);
+  
   return (
     <div className="card">
       {/* File Preview for Grid View */}
